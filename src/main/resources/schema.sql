@@ -27,8 +27,8 @@ CREATE TABLE `trip_user_mapping`
     `user_role` VARCHAR(10) NOT NULL,
     PRIMARY KEY(`trip_id`),
     PRIMARY KEY(`user_id`),
-    FOREIGN KEY(`trip_id`),
-    FOREIGN KEY(`user_id`)
+    FOREIGN KEY(`trip_id`) REFERENCES trip(`trip_id`),
+    FOREIGN KEY(`user_id`) REFERENCES users(`user_id`)
 );
 
 CREATE TABLE `trip_activity`
@@ -39,6 +39,6 @@ CREATE TABLE `trip_activity`
     `activity_time` TIME NOT NULL,
     `added_by` INTEGER NOT NULL,
     `activity_status` TINYINT NOT NULL,
-    PRIMARY KEY(`trip_id`),
+    FOREIGN KEY(`trip_id`) REFERENCES trip(`trip_id`),
     FOREIGN KEY(`trip_id`)
 );
