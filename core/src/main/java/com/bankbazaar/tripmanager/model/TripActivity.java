@@ -30,7 +30,7 @@ public class TripActivity implements Serializable {
     private String location;
 
     @Column(name="activity_time",nullable = false)
-    private Data activityTime;
+    private Date activityTime;
 
     @Column(name="added_by",nullable = false)
     private Long addedBy;
