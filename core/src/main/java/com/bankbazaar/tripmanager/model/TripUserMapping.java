@@ -27,7 +27,7 @@ public class TripUserMapping implements Serializable {
     private Long userId;
 
     @Column(name="user_role",nullable = false)
-    private String userRole;
+    private UserRole userRole;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="trip_id", referencedColumnName = "trip_id")
