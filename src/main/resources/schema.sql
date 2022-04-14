@@ -38,7 +38,7 @@ CREATE TABLE `trip_activity`
     `location` VARCHAR(512) NOT NULL,
     `activity_time` TIME NOT NULL,
     `added_by` INTEGER NOT NULL,
-    `activity_status` TINYINT,
-    PRIMARY KEY(`trip_id`)
+    `activity_status` TINYINT NOT NULL,
+    PRIMARY KEY(`trip_id`),
     FOREIGN KEY(`trip_id`)
 );
