@@ -45,8 +45,8 @@ public class UsersManager {
         Optional<Users> presentData = checkData(user.getUserId());
         if(presentData.isPresent())
         {
-            updateData(presentData.get(),user);
-            return userRepository.save(presentData.get());
+            Users newData = updateData(presentData.get(),user);
+            return userRepository.save(newData);
         }
         return null;
 
@@ -57,7 +57,7 @@ public class UsersManager {
         return userRepository.findById(id);
     }
 
-    public void updateData(Users presentData,Users user)
+    public Users updateData(Users presentData,Users user)
     {
         if(user.getUserName()!=null)
         {
@@ -79,5 +79,6 @@ public class UsersManager {
         {
             presentData.setPhone(user.getPhone());
         }
+        return presentData;
     }
 }

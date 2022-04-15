@@ -46,8 +46,8 @@ public class TripActivityManager {
         Optional<TripActivity> presentData = checkData(tripActivity.getTripId());
         if(presentData.isPresent())
         {
-            updateData(presentData.get(), tripActivity);
-            return tripActivityRepository.save(presentData.get());
+            TripActivity newData = updateData(presentData.get(), tripActivity);
+            return tripActivityRepository.save(newData);
 
         }
         return null;
@@ -58,7 +58,7 @@ public class TripActivityManager {
         return tripActivityRepository.findById(id);
     }
 
-    public void updateData(TripActivity presentData,TripActivity tripActivity)
+    public TripActivity updateData(TripActivity presentData,TripActivity tripActivity)
     {
         if(tripActivity.getActivityStatus()!=null)
         {
@@ -76,5 +76,7 @@ public class TripActivityManager {
         {
             presentData.setLocation(tripActivity.getLocation());
         }
+
+        return presentData;
     }
 }

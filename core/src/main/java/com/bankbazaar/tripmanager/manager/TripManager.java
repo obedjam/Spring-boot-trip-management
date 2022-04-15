@@ -45,8 +45,8 @@ public class TripManager {
         Optional<Trip> presentData = checkData(trip.getTripId());
         if(presentData.isPresent())
         {
-            updateData(presentData.get(),trip);
-            return tripRepository.save(presentData.get());
+            Trip newData = updateData(presentData.get(),trip);
+            return tripRepository.save(newData);
         }
         return null;
     }
@@ -56,7 +56,7 @@ public class TripManager {
         return tripRepository.findById(id);
     }
 
-    public void updateData(Trip presentData, Trip trip)
+    public Trip updateData(Trip presentData, Trip trip)
     {
         if(trip.getTripName()!=null)
         {
@@ -78,5 +78,6 @@ public class TripManager {
         {
             presentData.setEndDate(trip.getEndDate());
         }
+        return presentData;
     }
 }
