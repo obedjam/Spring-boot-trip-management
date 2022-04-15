@@ -26,24 +26,33 @@ public class TripManager {
     }
     /**
      * Delete record by id
+     *
      * @param id
      */
-    public String deleteTrip(Long id) {
-        if(tripRepository.findById(id).isEmpty())
+    public boolean deleteTrip(Long id) {
+        if(CheckData(id).isPresent())
         {
-            return null;
+            tripRepository.deleteById(id);
+            return true;
         }
-        tripRepository.deleteById(id);
-        return "Trip "+id+" has been removed" ;
+        return false;
     }
     /**
      * Update record
      */
     public Trip updateTrip(Trip trip) {
-        if(tripRepository.findById(trip.getTripId()).isEmpty())
+
+        Trip presentData = CheckData(trip.getTripId()).orElse(null);
+        if(presentData!=null)
         {
-            return null;
+            presentData.updateData(trip);
+            return tripRepository.save(presentData);
         }
-        return tripRepository.save(trip);
+        return null;
+    }
+
+    private Optional<Trip> CheckData(Long id)
+    {
+        return tripRepository.findById(id);
     }
 }

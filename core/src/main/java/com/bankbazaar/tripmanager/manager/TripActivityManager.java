@@ -26,24 +26,34 @@ public class TripActivityManager {
     }
     /**
      * Delete record by id
+     *
      * @param id
      */
-    public String deleteTripActivity(Long id) {
-        if(tripActivityRepository.findById(id).isEmpty())
+    public boolean deleteTripActivity(Long id) {
+        if(CheckData(id).isPresent())
         {
-            return null;
+            tripActivityRepository.deleteById(id);
+            return true;
         }
-        tripActivityRepository.deleteById(id);
-        return "TripActivity "+id+" has been removed" ;
+        return false;
     }
     /**
      * Update record
      */
     public TripActivity updateTripActivity(TripActivity tripActivity) {
-        if(tripActivityRepository.findById(tripActivity.getTripId()).isEmpty())
+
+        TripActivity presentData = CheckData(tripActivity.getTripId()).orElse(null);
+        if(presentData!=null)
         {
-            return null;
+            presentData.updateData(tripActivity);
+            return tripActivityRepository.save(presentData);
+
         }
-        return tripActivityRepository.save(tripActivity);
+        return null;
+    }
+
+    private Optional<TripActivity> CheckData(Long id)
+    {
+        return tripActivityRepository.findById(id);
     }
 }

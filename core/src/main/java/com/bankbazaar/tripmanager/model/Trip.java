@@ -44,4 +44,28 @@ public class Trip implements Serializable {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Date lastModifiedTime;
+
+    public void updateData(Trip trip)
+    {
+        if(trip.getTripName()!=null)
+        {
+            this.setTripName(trip.getTripName());
+        }
+        if(trip.getTripDescription()!=null)
+        {
+            this.setTripDescription(trip.getTripDescription());
+        }
+        if(trip.getDestination()!=null)
+        {
+            this.setDestination(trip.getDestination());
+        }
+        if(trip.getStartDate()!=null)
+        {
+            this.setStartDate(trip.getStartDate());
+        }
+        if(trip.getEndDate()!=null)
+        {
+            this.setEndDate(trip.getEndDate());
+        }
+    }
 }

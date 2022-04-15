@@ -49,4 +49,24 @@ public class TripActivity implements Serializable {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Date lastModifiedTime;
+
+    public void updateData(TripActivity tripActivity)
+    {
+        if(tripActivity.getActivityStatus()!=null)
+        {
+            this.setActivityStatus(tripActivity.getActivityStatus());
+        }
+        if(tripActivity.getActivityDescription()!=null)
+        {
+            this.setActivityDescription(tripActivity.getActivityDescription());
+        }
+        if(tripActivity.getActivityTime()!=null)
+        {
+            this.setActivityTime(tripActivity.getActivityTime());
+        }
+        if(tripActivity.getLocation()!=null)
+        {
+            this.setLocation(tripActivity.getLocation());
+        }
+    }
 }

@@ -10,6 +10,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TripUserCompositeKey implements Serializable {
-    private Long trip_id;
-    private Long user_id;
+    private Long tripId;
+    private Long userId;
 }

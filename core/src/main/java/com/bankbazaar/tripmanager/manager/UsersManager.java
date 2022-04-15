@@ -1,5 +1,6 @@
 package com.bankbazaar.tripmanager.manager;
 
+import com.bankbazaar.tripmanager.model.TripUserCompositeKey;
 import com.bankbazaar.tripmanager.model.Users;
 import com.bankbazaar.tripmanager.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,22 +30,31 @@ public class UsersManager {
      * Delete record by id
      * @param id
      */
-    public String deleteUsers(Long id) {
-        if(userRepository.findById(id).isEmpty())
+    public Boolean deleteUsers(Long id) {
+        if(CheckData(id).isPresent())
         {
-            return null;
+            userRepository.deleteById(id);
+            return true;
         }
-        userRepository.deleteById(id);
-        return "Users "+id+" has been removed" ;
+        return false;
     }
     /**
      * Update record
      */
     public Users updateUsers(Users user) {
-        if(userRepository.findById(user.getUserId()).isEmpty())
+
+        Users presentData = CheckData(user.getUserId()).orElse(null);
+        if(presentData!=null)
         {
-            return null;
+            presentData.updateData(user);
+            return userRepository.save(presentData);
         }
-        return userRepository.save(user);
+        return null;
+
+    }
+
+    private Optional<Users> CheckData(Long id)
+    {
+        return userRepository.findById(id);
     }
 }

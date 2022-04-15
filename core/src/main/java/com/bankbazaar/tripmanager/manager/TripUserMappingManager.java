@@ -14,38 +14,41 @@ public class TripUserMappingManager {
 
     /**
      * Insert to TripUserMapping table
-     * @param data
+     * @param trip_id
+     * @param user_id
      */
-    public TripUserMapping saveTripUserMapping(TripUserMapping data)
+    public TripUserMapping saveTripUserMapping(Long trip_id,Long user_id)
     {
-        return tripUserMapRepository.save(data);
-    }
-    /**
-     * Get record by trip_id and user_id
-     */
-    public Optional<TripUserMapping> getTripUserMappingById(TripUserMapping id) {
-        return tripUserMapRepository.findById(new TripUserCompositeKey(id.getTripId(),id.getUserId()));
+        return tripUserMapRepository.save(new TripUserMapping(trip_id,user_id));
     }
     /**
      * Delete record by trip_id and user_id
-     * @param id
+     * @param trip_id
+     * @param user_id
      */
-    public String deleteTripUserMapping(TripUserMapping id) {
-        if(tripUserMapRepository.findById(new TripUserCompositeKey(id.getTripId(),id.getUserId())).isEmpty())
-        {
-            return null;
+    public Boolean deleteTripUserMapping(Long trip_id,Long user_id) {
+
+        if(CheckData(trip_id, user_id).isPresent()) {
+            tripUserMapRepository.deleteById(new TripUserCompositeKey(trip_id, user_id));
+            return true;
         }
-        tripUserMapRepository.deleteById(new TripUserCompositeKey(id.getTripId(),id.getUserId()));
-        return "TripUserMapping has been removed" ;
+        return false;
     }
     /**
      * Update record
      */
     public TripUserMapping updateTripUserMapping(TripUserMapping tripUserMap) {
-        if(tripUserMapRepository.findById(new TripUserCompositeKey(tripUserMap.getTripId(),tripUserMap.getUserId())).isEmpty())
+        TripUserMapping presentData = CheckData(tripUserMap.getTripId(),tripUserMap.getUserId()).orElse(null);
+        if(presentData!=null)
         {
-            return null;
+            presentData.updateData(tripUserMap);
+            return tripUserMapRepository.save(presentData);
         }
-        return tripUserMapRepository.save(tripUserMap);
+        return null;
+    }
+
+    private Optional<TripUserMapping> CheckData(Long trip_id,Long user_id)
+    {
+        return tripUserMapRepository.findById(new TripUserCompositeKey(trip_id, user_id));
     }
 }

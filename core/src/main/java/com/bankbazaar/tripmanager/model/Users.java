@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -45,4 +46,34 @@ public class Users implements Serializable {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Date lastModifiedTime;
+
+    public void setPassword(String password)
+    {
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+    
+    
+    public void updateData(Users user)
+    {
+        if(user.getUserName()!=null)
+        {
+            this.setUserName(user.getUserName());
+        }
+        if(user.getDob()!=null)
+        {
+            this.setDob(user.getDob());
+        }
+        if(user.getEmail()!=null)
+        {
+            this.setEmail(user.getEmail());
+        }
+        if(user.getPassword()!=null)
+        {
+            this.setPassword(user.getPassword());
+        }
+        if(user.getPhone()!=null)
+        {
+            this.setPhone(user.getPhone());
+        }
+    }
 }
