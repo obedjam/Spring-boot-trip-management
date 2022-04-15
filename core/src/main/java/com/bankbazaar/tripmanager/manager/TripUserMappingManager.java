@@ -14,22 +14,22 @@ public class TripUserMappingManager {
 
     /**
      * Insert to TripUserMapping table
-     * @param trip_id
-     * @param user_id
+     * @param tripId
+     * @param userId
      */
-    public TripUserMapping saveTripUserMapping(Long trip_id,Long user_id)
+    public TripUserMapping saveTripUserMapping(Long tripId,Long userId)
     {
-        return tripUserMapRepository.save(new TripUserMapping(trip_id,user_id));
+        return tripUserMapRepository.save(new TripUserMapping(tripId,userId));
     }
     /**
      * Delete record by trip_id and user_id
-     * @param trip_id
-     * @param user_id
+     * @param tripId
+     * @param userId
      */
-    public Boolean deleteTripUserMapping(Long trip_id,Long user_id) {
+    public Boolean deleteTripUserMapping(Long tripId,Long userId) {
 
-        if(CheckData(trip_id, user_id).isPresent()) {
-            tripUserMapRepository.deleteById(new TripUserCompositeKey(trip_id, user_id));
+        if(CheckData(tripId, userId).isPresent()) {
+            tripUserMapRepository.deleteById(new TripUserCompositeKey(tripId, userId));
             return true;
         }
         return false;
@@ -47,8 +47,8 @@ public class TripUserMappingManager {
         return null;
     }
 
-    private Optional<TripUserMapping> CheckData(Long trip_id,Long user_id)
+    private Optional<TripUserMapping> CheckData(Long tripId,Long userId)
     {
-        return tripUserMapRepository.findById(new TripUserCompositeKey(trip_id, user_id));
+        return tripUserMapRepository.findById(new TripUserCompositeKey(tripId, userId));
     }
 }
