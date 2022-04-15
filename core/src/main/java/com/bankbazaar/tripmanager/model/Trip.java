@@ -20,7 +20,7 @@ import java.sql.Date;
 public class Trip implements Serializable {
     @Id
     @Column(name="trip_id",nullable = false)
-    private Long userId;
+    private Long tripId;
 
     @Column(name="trip_name",nullable = false)
     private String tripName;
