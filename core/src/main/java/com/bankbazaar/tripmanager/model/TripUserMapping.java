@@ -46,24 +46,11 @@ public class TripUserMapping implements Serializable {
     @Column(name = "last_modified_date")
     private Date lastModifiedTime;
 
-    public TripUserMapping(Long tripId, Long userId) {
+    public TripUserMapping(Long tripId, Long userId, UserRole role) {
         this.tripId=tripId;
         this.userId=userId;
+        this.userRole=role;
     }
 
-    public void updateData(TripUserMapping tripUserMap)
-    {
-        if(tripUserMap.getTripId()!=null)
-        {
-            this.setTripId(tripUserMap.getTripId());
-        }
-        if(tripUserMap.getUserId()!=null)
-        {
-            this.setUserId(tripUserMap.getUserId());
-        }
-        if(tripUserMap.getUserRole()!=null)
-        {
-            this.setUserRole(tripUserMap.getUserRole());
-        }
-    }
+
 }

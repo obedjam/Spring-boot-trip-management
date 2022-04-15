@@ -1,6 +1,5 @@
 package com.bankbazaar.tripmanager.manager;
 
-import com.bankbazaar.tripmanager.model.TripUserCompositeKey;
 import com.bankbazaar.tripmanager.model.Users;
 import com.bankbazaar.tripmanager.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ public class UsersManager {
      * @param id
      */
     public Boolean deleteUsers(Long id) {
-        if(CheckData(id).isPresent())
+        if(checkData(id).isPresent())
         {
             userRepository.deleteById(id);
             return true;
@@ -43,18 +42,42 @@ public class UsersManager {
      */
     public Users updateUsers(Users user) {
 
-        Users presentData = CheckData(user.getUserId()).orElse(null);
-        if(presentData!=null)
+        Optional<Users> presentData = checkData(user.getUserId());
+        if(presentData.isPresent())
         {
-            presentData.updateData(user);
-            return userRepository.save(presentData);
+            updateData(presentData.get(),user);
+            return userRepository.save(presentData.get());
         }
         return null;
 
     }
 
-    private Optional<Users> CheckData(Long id)
+    private Optional<Users> checkData(Long id)
     {
         return userRepository.findById(id);
+    }
+
+    public void updateData(Users presentData,Users user)
+    {
+        if(user.getUserName()!=null)
+        {
+            presentData.setUserName(user.getUserName());
+        }
+        if(user.getDob()!=null)
+        {
+            presentData.setDob(user.getDob());
+        }
+        if(user.getEmail()!=null)
+        {
+            presentData.setEmail(user.getEmail());
+        }
+        if(user.getPassword()!=null)
+        {
+            presentData.setPassword(user.getPassword());
+        }
+        if(user.getPhone()!=null)
+        {
+            presentData.setPhone(user.getPhone());
+        }
     }
 }

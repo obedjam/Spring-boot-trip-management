@@ -30,7 +30,7 @@ public class TripManager {
      * @param id
      */
     public boolean deleteTrip(Long id) {
-        if(CheckData(id).isPresent())
+        if(checkData(id).isPresent())
         {
             tripRepository.deleteById(id);
             return true;
@@ -42,17 +42,41 @@ public class TripManager {
      */
     public Trip updateTrip(Trip trip) {
 
-        Trip presentData = CheckData(trip.getTripId()).orElse(null);
-        if(presentData!=null)
+        Optional<Trip> presentData = checkData(trip.getTripId());
+        if(presentData.isPresent())
         {
-            presentData.updateData(trip);
-            return tripRepository.save(presentData);
+            updateData(presentData.get(),trip);
+            return tripRepository.save(presentData.get());
         }
         return null;
     }
 
-    private Optional<Trip> CheckData(Long id)
+    private Optional<Trip> checkData(Long id)
     {
         return tripRepository.findById(id);
+    }
+
+    public void updateData(Trip presentData, Trip trip)
+    {
+        if(trip.getTripName()!=null)
+        {
+            presentData.setTripName(trip.getTripName());
+        }
+        if(trip.getTripDescription()!=null)
+        {
+            presentData.setTripDescription(trip.getTripDescription());
+        }
+        if(trip.getDestination()!=null)
+        {
+            presentData.setDestination(trip.getDestination());
+        }
+        if(trip.getStartDate()!=null)
+        {
+            presentData.setStartDate(trip.getStartDate());
+        }
+        if(trip.getEndDate()!=null)
+        {
+            presentData.setEndDate(trip.getEndDate());
+        }
     }
 }

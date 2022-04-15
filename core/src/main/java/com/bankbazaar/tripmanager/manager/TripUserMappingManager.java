@@ -2,6 +2,7 @@ package com.bankbazaar.tripmanager.manager;
 
 import com.bankbazaar.tripmanager.model.TripUserCompositeKey;
 import com.bankbazaar.tripmanager.model.TripUserMapping;
+import com.bankbazaar.tripmanager.model.UserRole;
 import com.bankbazaar.tripmanager.repository.TripUserMappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,9 +18,9 @@ public class TripUserMappingManager {
      * @param tripId
      * @param userId
      */
-    public TripUserMapping saveTripUserMapping(Long tripId,Long userId)
+    public TripUserMapping saveTripUserMapping(Long tripId, Long userId, UserRole role)
     {
-        return tripUserMapRepository.save(new TripUserMapping(tripId,userId));
+        return tripUserMapRepository.save(new TripUserMapping(tripId,userId,role));
     }
     /**
      * Delete record by trip_id and user_id
@@ -28,7 +29,7 @@ public class TripUserMappingManager {
      */
     public Boolean deleteTripUserMapping(Long tripId,Long userId) {
 
-        if(CheckData(tripId, userId).isPresent()) {
+        if(checkData(tripId, userId).isPresent()) {
             tripUserMapRepository.deleteById(new TripUserCompositeKey(tripId, userId));
             return true;
         }
@@ -38,17 +39,25 @@ public class TripUserMappingManager {
      * Update record
      */
     public TripUserMapping updateTripUserMapping(TripUserMapping tripUserMap) {
-        TripUserMapping presentData = CheckData(tripUserMap.getTripId(),tripUserMap.getUserId()).orElse(null);
-        if(presentData!=null)
+        Optional<TripUserMapping> presentData = checkData(tripUserMap.getTripId(),tripUserMap.getUserId());
+        if(presentData.isPresent())
         {
-            presentData.updateData(tripUserMap);
-            return tripUserMapRepository.save(presentData);
+            updateData(presentData.get(),tripUserMap);
+            return tripUserMapRepository.save(presentData.get());
         }
         return null;
     }
 
-    private Optional<TripUserMapping> CheckData(Long tripId,Long userId)
+    private Optional<TripUserMapping> checkData(Long tripId,Long userId)
     {
         return tripUserMapRepository.findById(new TripUserCompositeKey(tripId, userId));
+    }
+
+    public void updateData(TripUserMapping presentData, TripUserMapping tripUserMap)
+    {
+        if(tripUserMap.getUserRole()!=null)
+        {
+            presentData.setUserRole(tripUserMap.getUserRole());
+        }
     }
 }

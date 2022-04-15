@@ -51,29 +51,5 @@ public class Users implements Serializable {
     {
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
     }
-    
-    
-    public void updateData(Users user)
-    {
-        if(user.getUserName()!=null)
-        {
-            this.setUserName(user.getUserName());
-        }
-        if(user.getDob()!=null)
-        {
-            this.setDob(user.getDob());
-        }
-        if(user.getEmail()!=null)
-        {
-            this.setEmail(user.getEmail());
-        }
-        if(user.getPassword()!=null)
-        {
-            this.setPassword(user.getPassword());
-        }
-        if(user.getPhone()!=null)
-        {
-            this.setPhone(user.getPhone());
-        }
-    }
+
 }

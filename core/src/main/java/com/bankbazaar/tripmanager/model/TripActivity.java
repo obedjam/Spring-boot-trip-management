@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Time;
 import java.sql.Date;
 
 @Entity
@@ -50,23 +49,4 @@ public class TripActivity implements Serializable {
     @Column(name = "last_modified_date")
     private Date lastModifiedTime;
 
-    public void updateData(TripActivity tripActivity)
-    {
-        if(tripActivity.getActivityStatus()!=null)
-        {
-            this.setActivityStatus(tripActivity.getActivityStatus());
-        }
-        if(tripActivity.getActivityDescription()!=null)
-        {
-            this.setActivityDescription(tripActivity.getActivityDescription());
-        }
-        if(tripActivity.getActivityTime()!=null)
-        {
-            this.setActivityTime(tripActivity.getActivityTime());
-        }
-        if(tripActivity.getLocation()!=null)
-        {
-            this.setLocation(tripActivity.getLocation());
-        }
-    }
 }
