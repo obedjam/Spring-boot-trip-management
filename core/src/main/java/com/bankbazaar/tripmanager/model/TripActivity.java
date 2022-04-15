@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Time;
 import java.sql.Date;
 
 @Entity
@@ -21,7 +20,7 @@ import java.sql.Date;
 public class TripActivity implements Serializable {
     @Id
     @Column(name="trip_id",nullable = false)
-    private Long tripId;
+    private Long userId;
 
     @Column(name="activity_description",nullable = false)
     private String activityDescription;

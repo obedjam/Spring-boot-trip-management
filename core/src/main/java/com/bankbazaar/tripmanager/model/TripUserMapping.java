@@ -17,6 +17,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="trip_user_mapping")
+@IdClass(TripUserCompositeKey.class)
 public class TripUserMapping implements Serializable {
     @Id
     @Column(name="trip_id",nullable = false)
