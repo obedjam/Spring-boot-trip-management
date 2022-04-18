@@ -2,7 +2,6 @@ package com.bankbazaar.tripmanager.manager;
 
 import com.bankbazaar.tripmanager.model.TripUserCompositeKey;
 import com.bankbazaar.tripmanager.model.TripUserMapping;
-import com.bankbazaar.tripmanager.model.UserRole;
 import com.bankbazaar.tripmanager.repository.TripUserMappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,12 +14,22 @@ public class TripUserMappingManager {
 
     /**
      * Insert to TripUserMapping table
-     * @param tripId
-     * @param userId
+     * @param data
      */
-    public TripUserMapping saveTripUserMapping(Long tripId, Long userId, UserRole role)
+    public TripUserMapping saveTripUserMapping(TripUserMapping data)
     {
-        return tripUserMapRepository.save(new TripUserMapping(tripId,userId,role));
+        if(data.getUserId()==null&&data.getTripId()==null) {
+            return tripUserMapRepository.save(data);
+        }
+        else{
+            Optional<TripUserMapping> presentData = exists(data.getTripId(),data.getUserId());
+            if(presentData.isPresent())
+            {
+                TripUserMapping newData = updateData(presentData.get(),data);
+                return tripUserMapRepository.save(newData);
+            }
+            return null;
+        }
     }
     /**
      * Delete record by trip_id and user_id
@@ -29,26 +38,14 @@ public class TripUserMappingManager {
      */
     public Boolean deleteTripUserMapping(Long tripId,Long userId) {
 
-        if(checkData(tripId, userId).isPresent()) {
+        if(exists(tripId, userId).isPresent()) {
             tripUserMapRepository.deleteById(new TripUserCompositeKey(tripId, userId));
             return true;
         }
         return false;
     }
-    /**
-     * Update record
-     */
-    public TripUserMapping updateTripUserMapping(TripUserMapping tripUserMap) {
-        Optional<TripUserMapping> presentData = checkData(tripUserMap.getTripId(),tripUserMap.getUserId());
-        if(presentData.isPresent())
-        {
-            TripUserMapping newData = updateData(presentData.get(),tripUserMap);
-            return tripUserMapRepository.save(newData);
-        }
-        return null;
-    }
 
-    private Optional<TripUserMapping> checkData(Long tripId,Long userId)
+    private Optional<TripUserMapping> exists(Long tripId,Long userId)
     {
         return tripUserMapRepository.findById(new TripUserCompositeKey(tripId, userId));
     }

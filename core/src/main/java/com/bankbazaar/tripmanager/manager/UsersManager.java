@@ -2,14 +2,30 @@ package com.bankbazaar.tripmanager.manager;
 
 import com.bankbazaar.tripmanager.model.Users;
 import com.bankbazaar.tripmanager.repository.UsersRepository;
+import com.bankbazaar.tripmanager.security.LoginUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
-public class UsersManager {
+public class UsersManager implements UserDetailsService {
 
     @Autowired
     private UsersRepository userRepository;
+    /**
+     * Check if user exists by email
+     * @param email
+     */
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Users user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new LoginUserDetails(user);
+    }
 
     /**
      * Insert to Users table
@@ -17,7 +33,17 @@ public class UsersManager {
      */
     public Users saveUsers(Users data)
     {
-        return userRepository.save(data);
+        if(data.getUserId()==null) {
+            return userRepository.save(data);
+        }
+        else {
+            Optional<Users> presentData = exists(data.getUserId());
+            if (presentData.isPresent()) {
+                Users newData = updateData(presentData.get(), data);
+                return userRepository.save(newData);
+            }
+            return null;
+        }
     }
     /**
      * Get record by ID
@@ -30,29 +56,15 @@ public class UsersManager {
      * @param id
      */
     public Boolean deleteUsers(Long id) {
-        if(checkData(id).isPresent())
+        if(exists(id).isPresent())
         {
             userRepository.deleteById(id);
             return true;
         }
         return false;
     }
-    /**
-     * Update record
-     */
-    public Users updateUsers(Users user) {
 
-        Optional<Users> presentData = checkData(user.getUserId());
-        if(presentData.isPresent())
-        {
-            Users newData = updateData(presentData.get(),user);
-            return userRepository.save(newData);
-        }
-        return null;
-
-    }
-
-    private Optional<Users> checkData(Long id)
+    private Optional<Users> exists(Long id)
     {
         return userRepository.findById(id);
     }

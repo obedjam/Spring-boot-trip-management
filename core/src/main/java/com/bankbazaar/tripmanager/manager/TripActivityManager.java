@@ -2,7 +2,6 @@ package com.bankbazaar.tripmanager.manager;
 
 import com.bankbazaar.tripmanager.model.TripActivity;
 import com.bankbazaar.tripmanager.repository.TripActivityRepository;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
@@ -17,7 +16,19 @@ public class TripActivityManager {
      */
     public TripActivity saveTripActivity(TripActivity data)
     {
-        return tripActivityRepository.save(data);
+        if(data.getTripId()==null) {
+            return tripActivityRepository.save(data);
+        }
+        else{
+            Optional<TripActivity> presentData = exists(data.getTripId());
+            if(presentData.isPresent())
+            {
+                TripActivity newData = updateData(presentData.get(), data);
+                return tripActivityRepository.save(newData);
+
+            }
+            return null;
+        }
     }
     /**
      * Get record by ID
@@ -31,29 +42,15 @@ public class TripActivityManager {
      * @param id
      */
     public boolean deleteTripActivity(Long id) {
-        if(checkData(id).isPresent())
+        if(exists(id).isPresent())
         {
             tripActivityRepository.deleteById(id);
             return true;
         }
         return false;
     }
-    /**
-     * Update record
-     */
-    public TripActivity updateTripActivity(TripActivity tripActivity) {
 
-        Optional<TripActivity> presentData = checkData(tripActivity.getTripId());
-        if(presentData.isPresent())
-        {
-            TripActivity newData = updateData(presentData.get(), tripActivity);
-            return tripActivityRepository.save(newData);
-
-        }
-        return null;
-    }
-
-    private Optional<TripActivity> checkData(Long id)
+    private Optional<TripActivity> exists(Long id)
     {
         return tripActivityRepository.findById(id);
     }

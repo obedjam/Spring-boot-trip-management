@@ -16,7 +16,18 @@ public class TripManager {
      */
     public Trip saveTrip(Trip data)
     {
-        return tripRepository.save(data);
+        if(data.getTripId()==null) {
+            return tripRepository.save(data);
+        }
+        else {
+            Optional<Trip> presentData = exists(data.getTripId());
+            if(presentData.isPresent())
+            {
+                Trip newData = updateData(presentData.get(),data);
+                return tripRepository.save(newData);
+            }
+            return null;
+        }
     }
     /**
      * Get record by ID
@@ -30,28 +41,15 @@ public class TripManager {
      * @param id
      */
     public boolean deleteTrip(Long id) {
-        if(checkData(id).isPresent())
+        if(exists(id).isPresent())
         {
             tripRepository.deleteById(id);
             return true;
         }
         return false;
     }
-    /**
-     * Update record
-     */
-    public Trip updateTrip(Trip trip) {
 
-        Optional<Trip> presentData = checkData(trip.getTripId());
-        if(presentData.isPresent())
-        {
-            Trip newData = updateData(presentData.get(),trip);
-            return tripRepository.save(newData);
-        }
-        return null;
-    }
-
-    private Optional<Trip> checkData(Long id)
+    private Optional<Trip> exists(Long id)
     {
         return tripRepository.findById(id);
     }
