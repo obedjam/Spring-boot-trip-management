@@ -1,0 +1,61 @@
+package com.bankbazaar.tripmanager.manager;
+
+import com.bankbazaar.tripmanager.model.TripUserCompositeKey;
+import com.bankbazaar.tripmanager.model.TripUserMapping;
+import com.bankbazaar.tripmanager.repository.TripUserMappingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
+
+public class TripUserMappingManager {
+
+    @Autowired
+    private TripUserMappingRepository tripUserMapRepository;
+
+    /**
+     * Insert to TripUserMapping table
+     * @param data
+     */
+    public TripUserMapping saveTripUserMapping(TripUserMapping data)
+    {
+        if(data.getUserId()==null&&data.getTripId()==null) {
+            return tripUserMapRepository.save(data);
+        }
+        else{
+            Optional<TripUserMapping> presentData = exists(data.getTripId(),data.getUserId());
+            if(presentData.isPresent())
+            {
+                TripUserMapping newData = updateData(presentData.get(),data);
+                return tripUserMapRepository.save(newData);
+            }
+            return null;
+        }
+    }
+    /**
+     * Delete record by trip_id and user_id
+     * @param tripId
+     * @param userId
+     */
+    public Boolean deleteTripUserMapping(Long tripId,Long userId) {
+
+        if(exists(tripId, userId).isPresent()) {
+            tripUserMapRepository.deleteById(new TripUserCompositeKey(tripId, userId));
+            return true;
+        }
+        return false;
+    }
+
+    private Optional<TripUserMapping> exists(Long tripId,Long userId)
+    {
+        return tripUserMapRepository.findById(new TripUserCompositeKey(tripId, userId));
+    }
+
+    public TripUserMapping updateData(TripUserMapping presentData, TripUserMapping tripUserMap)
+    {
+        if(tripUserMap.getUserRole()!=null)
+        {
+            presentData.setUserRole(tripUserMap.getUserRole());
+        }
+        return presentData;
+    }
+}

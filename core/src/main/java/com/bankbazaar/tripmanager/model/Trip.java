@@ -44,4 +44,5 @@ public class Trip implements Serializable {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Date lastModifiedTime;
+
 }
