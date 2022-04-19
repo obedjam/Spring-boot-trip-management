@@ -20,7 +20,12 @@ import java.sql.Date;
 public class TripActivity implements Serializable {
     @Id
     @Column(name="trip_id",nullable = false)
-    private Long tripId;
+    private Long id;
+
+    @MapsId
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false, insertable = false, updatable = false)
+    private Trip tripId;
 
     @Column(name="activity_description",nullable = false)
     private String activityDescription;
@@ -36,10 +41,6 @@ public class TripActivity implements Serializable {
 
     @Column(name="activity_status",nullable = false)
     private Integer activityStatus;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="trip_id", referencedColumnName = "trip_id")
-    private Trip trip;
 
     @CreatedDate
     @Column(name = "created_date")

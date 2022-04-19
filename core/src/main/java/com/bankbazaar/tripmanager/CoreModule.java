@@ -5,10 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-public class TripManagerApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(TripManagerApplication.class, args);
-    }
+@EnableJpaAuditing
+public class CoreModule {public static void main(String[] args) {
+    SpringApplication.run(CoreModule.class, args);
+}
 
 }

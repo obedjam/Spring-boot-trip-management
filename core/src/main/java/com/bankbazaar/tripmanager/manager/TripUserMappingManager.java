@@ -4,9 +4,10 @@ import com.bankbazaar.tripmanager.model.TripUserCompositeKey;
 import com.bankbazaar.tripmanager.model.TripUserMapping;
 import com.bankbazaar.tripmanager.repository.TripUserMappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class TripUserMappingManager {
 
     @Autowired
@@ -22,7 +23,7 @@ public class TripUserMappingManager {
             return tripUserMapRepository.save(data);
         }
         else{
-            Optional<TripUserMapping> presentData = exists(data.getTripId(),data.getUserId());
+            Optional<TripUserMapping> presentData = exists(data.getTripId().getTripId(),data.getUserId().getUserId());
             if(presentData.isPresent())
             {
                 TripUserMapping newData = updateData(presentData.get(),data);

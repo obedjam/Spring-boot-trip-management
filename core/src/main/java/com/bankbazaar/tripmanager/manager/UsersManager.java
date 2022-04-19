@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class UsersManager implements UserDetailsService {
 
     @Autowired
@@ -33,17 +34,12 @@ public class UsersManager implements UserDetailsService {
      */
     public Users saveUsers(Users data)
     {
-        if(data.getUserId()==null) {
-            return userRepository.save(data);
-        }
-        else {
             Optional<Users> presentData = exists(data.getUserId());
             if (presentData.isPresent()) {
                 Users newData = updateData(presentData.get(), data);
                 return userRepository.save(newData);
             }
             return null;
-        }
     }
     /**
      * Get record by ID

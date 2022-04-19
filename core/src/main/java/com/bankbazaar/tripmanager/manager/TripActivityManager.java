@@ -3,9 +3,10 @@ package com.bankbazaar.tripmanager.manager;
 import com.bankbazaar.tripmanager.model.TripActivity;
 import com.bankbazaar.tripmanager.repository.TripActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class TripActivityManager {
     @Autowired
     private TripActivityRepository tripActivityRepository;
@@ -20,7 +21,7 @@ public class TripActivityManager {
             return tripActivityRepository.save(data);
         }
         else{
-            Optional<TripActivity> presentData = exists(data.getTripId());
+            Optional<TripActivity> presentData = exists(data.getTripId().getTripId());
             if(presentData.isPresent())
             {
                 TripActivity newData = updateData(presentData.get(), data);

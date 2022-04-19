@@ -33,7 +33,7 @@ public class Users implements Serializable {
     @Column(name="email",nullable = false)
     private String email;
 
-    @Column(name="dob",nullable = false)
+    @Column(name="dob", nullable = false)
     private Date dob;
 
     @Column(name="phone",nullable = false)

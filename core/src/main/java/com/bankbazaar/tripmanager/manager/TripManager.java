@@ -1,11 +1,13 @@
 package com.bankbazaar.tripmanager.manager;
 
 import com.bankbazaar.tripmanager.model.Trip;
+import com.bankbazaar.tripmanager.model.TripActivity;
 import com.bankbazaar.tripmanager.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class TripManager {
     @Autowired
     private TripRepository tripRepository;

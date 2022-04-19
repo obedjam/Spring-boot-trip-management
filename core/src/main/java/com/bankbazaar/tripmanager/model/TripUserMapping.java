@@ -20,23 +20,17 @@ import java.sql.Date;
 @IdClass(TripUserCompositeKey.class)
 public class TripUserMapping implements Serializable {
     @Id
-    @Column(name="trip_id",nullable = false)
-    private Long tripId;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false)
+    private Trip tripId;
 
     @Id
-    @Column(name="user_id",nullable = false)
-    private Long userId;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="user_id", referencedColumnName = "user_id", nullable = false)
+    private Users userId;
 
     @Column(name="user_role",nullable = false)
     private UserRole userRole;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="trip_id", referencedColumnName = "trip_id")
-    private Trip trip;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="user_id", referencedColumnName = "user_id")
-    private Users user;
 
     @CreatedDate
     @Column(name = "created_date")
