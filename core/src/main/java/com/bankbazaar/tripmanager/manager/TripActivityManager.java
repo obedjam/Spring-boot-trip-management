@@ -5,6 +5,7 @@ import com.bankbazaar.tripmanager.repository.TripActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 @Service
 public class TripActivityManager {
@@ -58,6 +59,7 @@ public class TripActivityManager {
 
     public void updateData(TripActivity presentData,TripActivity tripActivity)
     {
+        presentData.setLastModifiedTime(LocalDate.now());
         if(tripActivity.getActivityStatus()!=null)
         {
             presentData.setActivityStatus(tripActivity.getActivityStatus());

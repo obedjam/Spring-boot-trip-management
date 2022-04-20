@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 @Service
 public class UsersManager implements UserDetailsService {
@@ -69,6 +70,7 @@ public class UsersManager implements UserDetailsService {
 
     public void updateData(Users presentData,Users user)
     {
+        presentData.setLastModifiedTime(LocalDate.now());
         if(!user.getUserName().isBlank())
         {
             presentData.setUserName(user.getUserName());

@@ -6,6 +6,7 @@ import com.bankbazaar.tripmanager.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 @Service
 public class TripManager {
@@ -58,6 +59,7 @@ public class TripManager {
 
     public void updateData(Trip presentData, Trip trip)
     {
+        presentData.setLastModifiedTime(LocalDate.now());
         if(!trip.getTripName().isBlank())
         {
             presentData.setTripName(trip.getTripName());

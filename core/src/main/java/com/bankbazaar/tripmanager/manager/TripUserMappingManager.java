@@ -6,6 +6,7 @@ import com.bankbazaar.tripmanager.repository.TripUserMappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 @Service
 public class TripUserMappingManager {
@@ -53,6 +54,7 @@ public class TripUserMappingManager {
 
     public void updateData(TripUserMapping presentData, TripUserMapping tripUserMap)
     {
+        presentData.setLastModifiedTime(LocalDate.now());
         if(tripUserMap.getUserRole()!=null)
         {
             presentData.setUserRole(tripUserMap.getUserRole());
