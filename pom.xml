@@ -21,7 +21,7 @@
 		<java.version>11</java.version>
 		<spring-boot-starter-validation.version>2.6.6</spring-boot-starter-validation.version>
 		<modelmapper.version>3.1.0</modelmapper.version>
-		<jquery.version>3.4.1</jquery.version>
+		<spring-boot-starter-thymeleaf.version>2.6.6</spring-boot-starter-thymeleaf.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -68,13 +68,9 @@
 			<version>${modelmapper.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>jquery</artifactId>
-			<version>${jquery.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>webjars-locator-core</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<version>${spring-boot-starter-thymeleaf.version}</version>
 		</dependency>
 	</dependencies>
 

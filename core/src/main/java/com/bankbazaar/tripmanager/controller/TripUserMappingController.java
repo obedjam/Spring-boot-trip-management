@@ -21,7 +21,7 @@ public class TripUserMappingController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/delete-trip-map",method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<TripUserMapping> deleteUsers(@RequestParam Long tripId, @RequestParam Long userId) {
 
         if (!service.deleteTripUserMapping(tripId,userId)) {

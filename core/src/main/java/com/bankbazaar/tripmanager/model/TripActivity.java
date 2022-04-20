@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -34,7 +34,7 @@ public class TripActivity implements Serializable {
     private String location;
 
     @Column(name="activity_time",nullable = false)
-    private Date activityTime;
+    private LocalDate activityTime;
 
     @Column(name="added_by",nullable = false)
     private Long addedBy;
@@ -44,10 +44,10 @@ public class TripActivity implements Serializable {
 
     @CreatedDate
     @Column(name = "created_date")
-    private Date createdTime;
+    private LocalDate createdTime;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
-    private Date lastModifiedTime;
+    private LocalDate lastModifiedTime;
 
 }

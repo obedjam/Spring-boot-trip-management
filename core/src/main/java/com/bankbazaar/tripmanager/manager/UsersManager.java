@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,11 +22,11 @@ public class UsersManager implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Users user = userRepository.findByEmail(email);
-        if (user == null) {
+        Optional<Users> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
-        return new LoginUserDetails(user);
+        return new LoginUserDetails(user.get());
     }
 
     /**
@@ -34,18 +35,19 @@ public class UsersManager implements UserDetailsService {
      */
     public Users saveUsers(Users data)
     {
-            Optional<Users> presentData = exists(data.getUserId());
-            if (presentData.isPresent()) {
-                Users newData = updateData(presentData.get(), data);
-                return userRepository.save(newData);
-            }
-            return null;
+        Optional<Users> presentData = exists(data.getUserId());
+        Optional<Users> user = userRepository.findByEmail(data.getEmail());
+        if (user.isEmpty()) {
+            updateData(presentData.get(), data);
+            return userRepository.save(presentData.get());
+        }
+        return null;
     }
     /**
      * Get record by ID
      */
-    public Optional<Users> getUsersById(Long id) {
-        return userRepository.findById(id);
+    public Optional<Users> getUsersById(String email) {
+        return userRepository.findByEmail(email);
     }
     /**
      * Delete record by id
@@ -65,9 +67,9 @@ public class UsersManager implements UserDetailsService {
         return userRepository.findById(id);
     }
 
-    public Users updateData(Users presentData,Users user)
+    public void updateData(Users presentData,Users user)
     {
-        if(user.getUserName()!=null)
+        if(!user.getUserName().isBlank())
         {
             presentData.setUserName(user.getUserName());
         }
@@ -75,18 +77,17 @@ public class UsersManager implements UserDetailsService {
         {
             presentData.setDob(user.getDob());
         }
-        if(user.getEmail()!=null)
+        if(!user.getEmail().isBlank())
         {
             presentData.setEmail(user.getEmail());
         }
-        if(user.getPassword()!=null)
+        if(!user.getPassword().isBlank())
         {
-            presentData.setPassword(user.getPassword());
+            presentData.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         }
-        if(user.getPhone()!=null)
+        if(!user.getPhone().isBlank())
         {
             presentData.setPhone(user.getPhone());
         }
-        return presentData;
     }
 }

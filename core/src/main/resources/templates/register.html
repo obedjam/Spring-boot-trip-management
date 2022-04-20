@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        Registration Page
+    </title>
+</head>
+<body>
+<br>
+<br>
+<form method="post" th:action="@{/register}">
+
+    Name:
+    <input type="text" name="userName" required/><br>
+    <br>
+    Phone:
+    <input type="text" name="phone" maxlength="10" required/><br>
+    <br>
+    Email:
+    <input type="email" name="email" required /><br>
+    <br>
+    DOB:
+    <input type="date" name="dob" required/><br>
+    <br>
+    Password:
+    <input type="password" name="password" required minlength="6" maxlength="10"/><br>
+    <br>
+    <input type="submit" value="Submit"/>
+</form>
+</body>
+</html>

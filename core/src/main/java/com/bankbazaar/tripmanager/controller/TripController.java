@@ -22,7 +22,7 @@ public class TripController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/get-trip",method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Optional<Trip>> findTripById(@RequestParam Long id) {
 
         Optional<Trip> tripData = service.getTripById(id);
@@ -33,7 +33,7 @@ public class TripController {
         return new ResponseEntity<>(tripData, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/delete-trip",method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<Trip> deleteTrip(@RequestParam Long id) {
 
         if (!service.deleteTrip(id)) {

@@ -25,8 +25,8 @@ public class TripManager {
             Optional<Trip> presentData = exists(data.getTripId());
             if(presentData.isPresent())
             {
-                Trip newData = updateData(presentData.get(),data);
-                return tripRepository.save(newData);
+                updateData(presentData.get(),data);
+                return tripRepository.save(presentData.get());
             }
             return null;
         }
@@ -56,17 +56,17 @@ public class TripManager {
         return tripRepository.findById(id);
     }
 
-    public Trip updateData(Trip presentData, Trip trip)
+    public void updateData(Trip presentData, Trip trip)
     {
-        if(trip.getTripName()!=null)
+        if(!trip.getTripName().isBlank())
         {
             presentData.setTripName(trip.getTripName());
         }
-        if(trip.getTripDescription()!=null)
+        if(!trip.getTripDescription().isBlank())
         {
             presentData.setTripDescription(trip.getTripDescription());
         }
-        if(trip.getDestination()!=null)
+        if(!trip.getDestination().isBlank())
         {
             presentData.setDestination(trip.getDestination());
         }
@@ -78,6 +78,5 @@ public class TripManager {
         {
             presentData.setEndDate(trip.getEndDate());
         }
-        return presentData;
     }
 }

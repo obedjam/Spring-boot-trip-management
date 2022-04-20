@@ -26,8 +26,8 @@ public class TripUserMappingManager {
             Optional<TripUserMapping> presentData = exists(data.getTripId().getTripId(),data.getUserId().getUserId());
             if(presentData.isPresent())
             {
-                TripUserMapping newData = updateData(presentData.get(),data);
-                return tripUserMapRepository.save(newData);
+                updateData(presentData.get(),data);
+                return tripUserMapRepository.save(presentData.get());
             }
             return null;
         }
@@ -51,12 +51,11 @@ public class TripUserMappingManager {
         return tripUserMapRepository.findById(new TripUserCompositeKey(tripId, userId));
     }
 
-    public TripUserMapping updateData(TripUserMapping presentData, TripUserMapping tripUserMap)
+    public void updateData(TripUserMapping presentData, TripUserMapping tripUserMap)
     {
         if(tripUserMap.getUserRole()!=null)
         {
             presentData.setUserRole(tripUserMap.getUserRole());
         }
-        return presentData;
     }
 }
