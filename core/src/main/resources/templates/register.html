@@ -7,7 +7,7 @@
 <body>
 <br>
 <br>
-<form method="post" th:action="@{/register}">
+<form method="post" th:action="@{/user/register}">
 
     Name:
     <input type="text" name="userName" required/><br>
@@ -26,5 +26,14 @@
     <br>
     <input type="submit" value="Submit"/>
 </form>
+<script>
+var url_string = window.location.href;
+var url = new URL(url_string);
+var status = url.searchParams.get("status");
+if(status=="1")
+{
+alert("Provided email is already a registered user");
+}
+</script>
 </body>
 </html>

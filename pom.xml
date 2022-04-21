@@ -5,6 +5,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>core</module>
+		<module>service</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -22,6 +23,7 @@
 		<spring-boot-starter-validation.version>2.6.6</spring-boot-starter-validation.version>
 		<modelmapper.version>3.1.0</modelmapper.version>
 		<spring-boot-starter-thymeleaf.version>2.6.6</spring-boot-starter-thymeleaf.version>
+		<logback-classic.version>1.2.3</logback-classic.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -71,6 +73,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 			<version>${spring-boot-starter-thymeleaf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-classic.version}</version>
 		</dependency>
 	</dependencies>
 
