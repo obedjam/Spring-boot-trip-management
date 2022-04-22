@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        User Account
+    </title>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+</head>
+<body>
+<br>
+<br>
+<div style="display: flex; justify-content: space-between;">
+<p th:text="|User ID: ${userData.userId}|"></p>
+</div>
+<br>
+<div style="display: flex; justify-content: space-between;">
+<p th:text="|Name: ${userData.userName}|"></p>
+</div>
+<br>
+<div style="display: flex; justify-content: space-between;">
+<p th:text="|E-mail: ${userData.email}|"></p>
+</div>
+<br>
+<div style="display: flex; justify-content: space-between;">
+<p th:text="|Date Of Birth: ${userData.dob}|"></p>
+</div>
+<br>
+<div style="display: flex; justify-content: space-between;">
+<p th:text="|Phone: ${userData.phone}|"></p>
+</div>
+<br>
+<button onclick="updateAccount()">update account</button>
+<br>
+<br>
+<button onclick="logout()">logout</button>
+
+
+<script>
+function updateAccount(){
+  location.replace("/user/update")
+}
+function logout(){
+  location.replace("/logout")
+}
+</script>
+</body>
+</html>
