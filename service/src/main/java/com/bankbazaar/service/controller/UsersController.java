@@ -1,7 +1,8 @@
-package com.bankbazaar.core.controller;
+package com.bankbazaar.service.controller;
 
 import com.bankbazaar.core.manager.UsersManager;
-import com.bankbazaar.core.model.Users;
+import com.bankbazaar.core.model.UserEntity;
+import com.bankbazaar.dto.model.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
+import org.modelmapper.ModelMapper;
 
 @Slf4j
 @Controller
@@ -22,16 +24,18 @@ import java.util.Optional;
 public class UsersController {
     @Autowired
     private UsersManager service;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @RequestMapping(value = "/register",method = RequestMethod.GET)
-    public String welcome(@RequestParam(value = "status", defaultValue = "0") Integer status){
+    public String register(@RequestParam(value = "status", defaultValue = "0") Integer status){
         return "register";
     }
 
     @RequestMapping(value= "/register",method = RequestMethod.POST)
-    public String addUsers(@Valid @ModelAttribute Users user, HttpServletRequest request) throws Exception{
+    public String addUsers(@Valid @ModelAttribute UserDto user, HttpServletRequest request) throws Exception{
         String plainPassword = user.getPassword();
-        Users response = service.insertUsers(user);
+        UserEntity response = service.insertUsers(modelMapper.map(user, UserEntity.class));
         if(response==null)
         {
             return "redirect:/user/register?status=1";
@@ -46,10 +50,10 @@ public class UsersController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addUsers(@Valid @ModelAttribute Users user, Principal principal) {
-        Users data = service.getUsersById(principal.getName()).get();
+    public String addUsers(@Valid @ModelAttribute UserDto user, Principal principal) {
+        UserEntity data = service.getUsersById(principal.getName()).get();
         user.setUserId(data.getUserId());
-        Users response = service.updateUsers(user);
+        UserEntity response = service.updateUsers(modelMapper.map(user, UserEntity.class));
         if(response==null)
         {
             return "redirect:/user/update?status=1";
@@ -59,7 +63,7 @@ public class UsersController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getUserDetails(Principal principal) {
-        Optional<Users> userData = service.getUsersById(principal.getName());
+        Optional<UserEntity> userData = service.getUsersById(principal.getName());
         ModelAndView user;
         if (userData.isEmpty()) {
             user = new ModelAndView("logout");
@@ -73,7 +77,7 @@ public class UsersController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseEntity<Users> deleteUsers(@RequestParam Long id) {
+    public ResponseEntity<UserEntity> deleteUsers(@RequestParam Long id) {
 
         if (!service.deleteUsers(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

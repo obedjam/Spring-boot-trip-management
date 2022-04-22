@@ -2,15 +2,15 @@ package com.bankbazaar.core.security;
 
 import java.util.Collection;
 
-import com.bankbazaar.core.model.Users;
+import com.bankbazaar.core.model.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class LoginUserDetails implements UserDetails {
 
-    private Users user;
+    private UserEntity user;
 
-    public LoginUserDetails(Users user) {
+    public LoginUserDetails(UserEntity user) {
         this.user = user;
     }
 

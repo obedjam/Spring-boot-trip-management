@@ -1,6 +1,6 @@
 package com.bankbazaar.core.manager;
 
-import com.bankbazaar.core.model.TripActivity;
+import com.bankbazaar.core.model.TripActivityEntity;
 import com.bankbazaar.core.repository.TripActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,13 @@ public class TripActivityManager {
      * Insert to TripActivity table
      * @param data
      */
-    public TripActivity saveTripActivity(TripActivity data)
+    public TripActivityEntity saveTripActivity(TripActivityEntity data)
     {
         if(data.getTripId()==null) {
             return tripActivityRepository.save(data);
         }
         else{
-            Optional<TripActivity> presentData = exists(data.getTripId().getTripId());
+            Optional<TripActivityEntity> presentData = exists(data.getTripId().getTripId());
             if(presentData.isPresent())
             {
                 updateData(presentData.get(), data);
@@ -34,7 +34,7 @@ public class TripActivityManager {
     /**
      * Get record by ID
      */
-    public Optional<TripActivity> getTripActivityById(Long id) {
+    public Optional<TripActivityEntity> getTripActivityById(Long id) {
         return tripActivityRepository.findById(id);
     }
     /**
@@ -51,12 +51,12 @@ public class TripActivityManager {
         return false;
     }
 
-    private Optional<TripActivity> exists(Long id)
+    private Optional<TripActivityEntity> exists(Long id)
     {
         return tripActivityRepository.findById(id);
     }
 
-    public void updateData(TripActivity presentData,TripActivity tripActivity)
+    public void updateData(TripActivityEntity presentData, TripActivityEntity tripActivity)
     {
         if(tripActivity.getActivityStatus()!=null)
         {

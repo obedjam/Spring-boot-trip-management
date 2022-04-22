@@ -1,7 +1,9 @@
-package com.bankbazaar.core.controller;
+package com.bankbazaar.service.controller;
 
 import com.bankbazaar.core.manager.TripUserMappingManager;
-import com.bankbazaar.core.model.TripUserMapping;
+import com.bankbazaar.core.model.TripUserMappingEntity;
+import com.bankbazaar.dto.model.TripUserMappingDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +16,18 @@ public class TripUserMappingController {
     @Autowired
     private TripUserMappingManager service;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<TripUserMapping> addUsers(@Valid @RequestBody TripUserMapping tripUserMap) {
+    @Autowired
+    private ModelMapper modelMapper;
 
-        TripUserMapping response = service.saveTripUserMapping(tripUserMap);
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<TripUserMappingEntity> addUsers(@Valid @RequestBody TripUserMappingDto tripUserMap) {
+
+        TripUserMappingEntity response = service.saveTripUserMapping(modelMapper.map(tripUserMap, TripUserMappingEntity.class));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseEntity<TripUserMapping> deleteUsers(@RequestParam Long tripId, @RequestParam Long userId) {
+    public ResponseEntity<TripUserMappingEntity> deleteUsers(@RequestParam Long tripId, @RequestParam Long userId) {
 
         if (!service.deleteTripUserMapping(tripId,userId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -32,9 +37,9 @@ public class TripUserMappingController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<TripUserMapping> updateUsers(@Valid @RequestBody TripUserMapping tripUserMap) {
+    public ResponseEntity<TripUserMappingEntity> updateUsers(@Valid @RequestBody TripUserMappingDto tripUserMap) {
 
-        TripUserMapping response = service.saveTripUserMapping(tripUserMap);
+        TripUserMappingEntity response = service.saveTripUserMapping(modelMapper.map(tripUserMap, TripUserMappingEntity.class));
         if(response == null)
         {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

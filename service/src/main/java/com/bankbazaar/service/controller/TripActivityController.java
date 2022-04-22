@@ -1,7 +1,9 @@
-package com.bankbazaar.core.controller;
+package com.bankbazaar.service.controller;
 
 import com.bankbazaar.core.manager.TripActivityManager;
-import com.bankbazaar.core.model.TripActivity;
+import com.bankbazaar.core.model.TripActivityEntity;
+import com.bankbazaar.dto.model.TripActivityDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +17,20 @@ public class TripActivityController {
     @Autowired
     private TripActivityManager service;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<TripActivity> addTrip(@Valid @RequestBody TripActivity tripActivity) {
+    @Autowired
+    private ModelMapper modelMapper;
 
-        TripActivity response = service.saveTripActivity(tripActivity);
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<TripActivityEntity> addTrip(@Valid @RequestBody TripActivityDto tripActivity) {
+
+        TripActivityEntity response = service.saveTripActivity(modelMapper.map(tripActivity, TripActivityEntity.class));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<TripActivity> findTripById(@RequestParam Long id) {
+    public ResponseEntity<TripActivityEntity> findTripById(@RequestParam Long id) {
 
-        Optional<TripActivity> tripData = service.getTripActivityById(id);
+        Optional<TripActivityEntity> tripData = service.getTripActivityById(id);
         if (tripData.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -34,7 +39,7 @@ public class TripActivityController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseEntity<TripActivity> deleteTrip(@RequestParam Long id) {
+    public ResponseEntity<TripActivityEntity> deleteTrip(@RequestParam Long id) {
 
         if (!service.deleteTripActivity(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -44,9 +49,9 @@ public class TripActivityController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<TripActivity> updateTrip(@Valid @RequestBody TripActivity tripActivity) {
+    public ResponseEntity<TripActivityEntity> updateTrip(@Valid @RequestBody TripActivityDto tripActivity) {
 
-        TripActivity response = service.saveTripActivity(tripActivity);
+        TripActivityEntity response = service.saveTripActivity(modelMapper.map(tripActivity, TripActivityEntity.class));
         if(response == null)
         {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

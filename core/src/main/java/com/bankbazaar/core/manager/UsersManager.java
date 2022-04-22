@@ -1,6 +1,6 @@
 package com.bankbazaar.core.manager;
 
-import com.bankbazaar.core.model.Users;
+import com.bankbazaar.core.model.UserEntity;
 import com.bankbazaar.core.repository.UsersRepository;
 import com.bankbazaar.core.security.LoginUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class UsersManager implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Users> user = userRepository.findByEmail(email);
+        Optional<UserEntity> user = userRepository.findByEmail(email);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -33,9 +33,9 @@ public class UsersManager implements UserDetailsService {
      *  Insert to Users table
      * @param data
      */
-    public Users insertUsers(Users data)
+    public UserEntity insertUsers(UserEntity data)
     {
-        Optional<Users> user = userRepository.findByEmail(data.getEmail());
+        Optional<UserEntity> user = userRepository.findByEmail(data.getEmail());
         if(user.isEmpty())
         {
             data.setPassword(BCrypt.hashpw(data.getPassword(), BCrypt.gensalt()));
@@ -50,10 +50,10 @@ public class UsersManager implements UserDetailsService {
      *  Update to Users table
      * @param data
      */
-    public Users updateUsers(Users data)
+    public UserEntity updateUsers(UserEntity data)
     {
-        Optional<Users> presentData = exists(data.getUserId());
-        Optional<Users> user = userRepository.findByEmail(data.getEmail());
+        Optional<UserEntity> presentData = exists(data.getUserId());
+        Optional<UserEntity> user = userRepository.findByEmail(data.getEmail());
         if (user.isEmpty()) {
             /**
              * Here we update the object inside the optional presentData
@@ -70,7 +70,7 @@ public class UsersManager implements UserDetailsService {
     /**
      * Get record by ID
      */
-    public Optional<Users> getUsersById(String email) {
+    public Optional<UserEntity> getUsersById(String email) {
         return userRepository.findByEmail(email);
     }
     /**
@@ -86,12 +86,12 @@ public class UsersManager implements UserDetailsService {
         return false;
     }
 
-    private Optional<Users> exists(Long id)
+    private Optional<UserEntity> exists(Long id)
     {
         return userRepository.findById(id);
     }
 
-    public void updateData(Users presentData,Users user)
+    public void updateData(UserEntity presentData, UserEntity user)
     {
         if(!user.getUserName().isBlank())
         {

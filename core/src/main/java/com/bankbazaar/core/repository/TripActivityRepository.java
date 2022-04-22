@@ -1,7 +1,7 @@
 package com.bankbazaar.core.repository;
 
-import com.bankbazaar.core.model.TripActivity;
+import com.bankbazaar.core.model.TripActivityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TripActivityRepository extends JpaRepository<TripActivity, Long> {
+public interface TripActivityRepository extends JpaRepository<TripActivityEntity, Long> {
 }

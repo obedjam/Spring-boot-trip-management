@@ -16,31 +16,21 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name="trip_activity")
-public class TripActivity implements Serializable {
+@Table(name="trip_user_mapping")
+@IdClass(TripUserCompositeKey.class)
+public class TripUserMappingEntity implements Serializable {
     @Id
-    @Column(name="trip_id",nullable = false)
-    private Long id;
-
-    @MapsId
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false, insertable = false, updatable = false)
-    private Trip tripId;
+    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false)
+    private TripEntity tripId;
 
-    @Column(name="activity_description",nullable = false)
-    private String activityDescription;
+    @Id
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="user_id", referencedColumnName = "user_id", nullable = false)
+    private UserEntity userId;
 
-    @Column(name="location",nullable = false)
-    private String location;
-
-    @Column(name="activity_time",nullable = false)
-    private Date activityTime;
-
-    @Column(name="added_by",nullable = false)
-    private Long addedBy;
-
-    @Column(name="activity_status",nullable = false)
-    private Integer activityStatus;
+    @Column(name="user_role",nullable = false)
+    private UserRole userRole;
 
     @CreatedDate
     @Column(name = "created_date")
@@ -49,5 +39,7 @@ public class TripActivity implements Serializable {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Date lastModifiedTime;
+
+
 
 }

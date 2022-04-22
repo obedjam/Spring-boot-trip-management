@@ -1,6 +1,6 @@
 package com.bankbazaar.core.manager;
 
-import com.bankbazaar.core.model.TripUserMapping;
+import com.bankbazaar.core.model.TripUserMappingEntity;
 import com.bankbazaar.core.repository.TripUserMappingRepository;
 import com.bankbazaar.core.model.TripUserCompositeKey;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,13 @@ public class TripUserMappingManager {
      * Insert to TripUserMapping table
      * @param data
      */
-    public TripUserMapping saveTripUserMapping(TripUserMapping data)
+    public TripUserMappingEntity saveTripUserMapping(TripUserMappingEntity data)
     {
         if(data.getUserId()==null&&data.getTripId()==null) {
             return tripUserMapRepository.save(data);
         }
         else{
-            Optional<TripUserMapping> presentData = exists(data.getTripId().getTripId(),data.getUserId().getUserId());
+            Optional<TripUserMappingEntity> presentData = exists(data.getTripId().getTripId(),data.getUserId().getUserId());
             if(presentData.isPresent())
             {
                 updateData(presentData.get(),data);
@@ -46,12 +46,12 @@ public class TripUserMappingManager {
         return false;
     }
 
-    private Optional<TripUserMapping> exists(Long tripId,Long userId)
+    private Optional<TripUserMappingEntity> exists(Long tripId, Long userId)
     {
         return tripUserMapRepository.findById(new TripUserCompositeKey(tripId, userId));
     }
 
-    public void updateData(TripUserMapping presentData, TripUserMapping tripUserMap)
+    public void updateData(TripUserMappingEntity presentData, TripUserMappingEntity tripUserMap)
     {
         if(tripUserMap.getUserRole()!=null)
         {

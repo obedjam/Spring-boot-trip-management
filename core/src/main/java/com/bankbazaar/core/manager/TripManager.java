@@ -1,6 +1,6 @@
 package com.bankbazaar.core.manager;
 
-import com.bankbazaar.core.model.Trip;
+import com.bankbazaar.core.model.TripEntity;
 import com.bankbazaar.core.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,13 @@ public class TripManager {
      * Insert to Trip table
      * @param data
      */
-    public Trip saveTrip(Trip data)
+    public TripEntity saveTrip(TripEntity data)
     {
         if(data.getTripId()==null) {
             return tripRepository.save(data);
         }
         else {
-            Optional<Trip> presentData = exists(data.getTripId());
+            Optional<TripEntity> presentData = exists(data.getTripId());
             if(presentData.isPresent())
             {
                 updateData(presentData.get(),data);
@@ -33,7 +33,7 @@ public class TripManager {
     /**
      * Get record by ID
      */
-    public Optional<Trip> getTripById(Long id) {
+    public Optional<TripEntity> getTripById(Long id) {
         return tripRepository.findById(id);
     }
     /**
@@ -50,12 +50,12 @@ public class TripManager {
         return false;
     }
 
-    private Optional<Trip> exists(Long id)
+    private Optional<TripEntity> exists(Long id)
     {
         return tripRepository.findById(id);
     }
 
-    public void updateData(Trip presentData, Trip trip)
+    public void updateData(TripEntity presentData, TripEntity trip)
     {
         if(!trip.getTripName().isBlank())
         {

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="trip")
-public class Trip implements Serializable {
+public class TripEntity implements Serializable {
     @Id
     @GeneratedValue
     @Column(name="trip_id", nullable = false)
@@ -32,9 +33,11 @@ public class Trip implements Serializable {
     @Column(name="trip_description",nullable = false)
     private String tripDescription;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name="start_date",nullable = false)
     private Date startDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name="end_date",nullable = false)
     private Date endDate;
 
