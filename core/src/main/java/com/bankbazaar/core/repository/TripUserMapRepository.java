@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TripUserMapRepository extends JpaRepository<TripUserMapEntity, TripUserCompositeKey> {
-    public List<TripUserMapEntity> findAllByUserIdUserId(Long userId);
-    public List<TripUserMapEntity> findAllByTripIdTripId(Long tripId);
+    public List<TripUserMapEntity> findAllByUserId(Long userId);
+    public List<TripUserMapEntity> findAllByTripId(Long tripId);
 }

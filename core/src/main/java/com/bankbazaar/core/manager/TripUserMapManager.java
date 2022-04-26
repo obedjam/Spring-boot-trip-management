@@ -1,8 +1,6 @@
 package com.bankbazaar.core.manager;
 
-import com.bankbazaar.core.model.TripEntity;
 import com.bankbazaar.core.model.TripUserMapEntity;
-import com.bankbazaar.core.model.UserEntity;
 import com.bankbazaar.core.repository.TripRepository;
 import com.bankbazaar.core.repository.TripUserMapRepository;
 import com.bankbazaar.core.model.TripUserCompositeKey;
@@ -30,10 +28,6 @@ public class TripUserMapManager {
      */
     public TripUserMapEntity saveTripUserMapping(TripUserMapEntity data)
     {
-        Optional<TripEntity> tripId = tripRepository.findById(data.getTripId().getTripId());
-        Optional<UserEntity> userId = usersRepository.findById(data.getUserId().getUserId());
-        data.setTripId(tripId.get());
-        data.setUserId(userId.get());
         return tripUserMapRepository.save(data);
     }
     /**
@@ -42,7 +36,7 @@ public class TripUserMapManager {
      */
     public TripUserMapEntity updateTripUserMapping(TripUserMapEntity data)
     {
-            Optional<TripUserMapEntity> presentData = exists(data.getTripId().getTripId(),data.getUserId().getUserId());
+            Optional<TripUserMapEntity> presentData = exists(data.getTripId(),data.getUserId());
             if(presentData.isPresent())
             {
                 TripUserMapEntity newData = updateData(presentData.get(),data);
@@ -56,7 +50,7 @@ public class TripUserMapManager {
      */
     public List<TripUserMapEntity> getTripsUserId(Long userId) {
 
-        return tripUserMapRepository.findAllByUserIdUserId(userId);
+        return tripUserMapRepository.findAllByUserId(userId);
     }
     /**
      * get all trips using tripId
@@ -64,7 +58,7 @@ public class TripUserMapManager {
      */
     public List<TripUserMapEntity> getTripsTripId(Long tripId) {
 
-        return tripUserMapRepository.findAllByTripIdTripId(tripId);
+        return tripUserMapRepository.findAllByTripId(tripId);
     }
     /**
      * Delete record by trip_id and user_id

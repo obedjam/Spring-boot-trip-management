@@ -14,9 +14,9 @@ import java.util.Date;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="trip_activity")
+@NoArgsConstructor
 public class TripActivityEntity implements Serializable {
 
     @Id

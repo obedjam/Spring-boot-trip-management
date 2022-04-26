@@ -22,11 +22,11 @@
     </tr>
     <tbody>
     <tr style="padding-right: 20px; padding-left: 20px" th:each="user: ${userList}">
-            <td style="padding-right: 20px; padding-left: 20px" th:text="${user.userId.userId}"></td>
-            <td style="padding-right: 20px; padding-left: 20px" th:text="${user.userId.userName}"></td>
+            <td style="padding-right: 20px; padding-left: 20px" th:text="${user.user.userId}"></td>
+            <td style="padding-right: 20px; padding-left: 20px" th:text="${user.user.userName}"></td>
             <td style="padding-right: 20px; padding-left: 20px" th:text="${user.userRole}"></td>
             <td class="view"  style="padding-right: 20px; padding-left: 20px; padding-top: 15px">
-                <form th:method="delete" th:action="@{/trip-user-mapping/delete(tripId=${user.tripId.tripId},userId=${user.userId.userId})}">
+                <form th:method="delete" th:action="@{/trip-user-mapping/delete(tripId=${user.trip.tripId},userId=${user.user.userId})}">
                     <input type="submit" value="remove"/>
                 </form>
             </td>
@@ -58,7 +58,7 @@
 /*<![CDATA[*/
     function addUser(){
       let userId = document.getElementById("userId").value;
-      let tripId = /*[[${userList[0].tripId.tripId}]]*/;
+      let tripId = /*[[${userList[0].trip.tripId}]]*/;
       if(userId=="")
       {
       alert("Please provide proper user id");
@@ -78,7 +78,7 @@
 /*<![CDATA[*/
     function addAdmin(){
       let userId = document.getElementById("addAdminId").value;
-      let tripId = /*[[${userList[0].tripId.tripId}]]*/;
+      let tripId = /*[[${userList[0].trip.tripId}]]*/;
       if(userId=="")
       {
       alert("Please provide proper user id");
@@ -98,7 +98,7 @@
 /*<![CDATA[*/
     function removeAdmin(){
       let userId = document.getElementById("removeAdminId").value;
-      let tripId = /*[[${userList[0].tripId.tripId}]]*/;
+      let tripId = /*[[${userList[0].trip.tripId}]]*/;
       if(userId=="")
       {
       alert("Please provide proper user id");
@@ -126,7 +126,7 @@
 </script>
 <script>
     function activities(){
-      let tripId = [[${userList[0].tripId.tripId}]];
+      let tripId = [[${userList[0].trip.tripId}]];
       location.replace("/trip-activity?tripId="+tripId);
     }
 </script>

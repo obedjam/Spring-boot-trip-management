@@ -14,20 +14,26 @@ import java.util.Date;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="trip_user_mapping")
 @IdClass(TripUserCompositeKey.class)
+@NoArgsConstructor
 public class TripUserMapEntity implements Serializable,Comparable<TripUserMapEntity> {
     @Id
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false)
-    private TripEntity tripId;
+    @Column(name = "trip_id", nullable = false )
+    private Long tripId;
 
     @Id
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="user_id", referencedColumnName = "user_id", nullable = false)
-    private UserEntity userId;
+    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false)
+    private TripEntity trip;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    private UserEntity user;
 
     @Column(name="user_role",nullable = false)
     private UserRole userRole;

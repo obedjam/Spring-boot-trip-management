@@ -15,9 +15,9 @@ import java.util.Date;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="trip")
+@NoArgsConstructor
 public class TripEntity implements Serializable {
     @Id
     @GeneratedValue

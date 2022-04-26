@@ -1,7 +1,6 @@
 package com.bankbazaar.core.manager;
 
 import com.bankbazaar.core.model.TripActivityEntity;
-import com.bankbazaar.core.model.TripEntity;
 import com.bankbazaar.core.repository.TripActivityRepository;
 import com.bankbazaar.core.repository.TripRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +24,6 @@ public class TripActivityManager {
      */
     public TripActivityEntity saveTripActivity(TripActivityEntity data)
     {
-        Optional<TripEntity> trip = tripRepository.findById(data.getTripId().getTripId());
-        data.setTripId(trip.get());
         return tripActivityRepository.save(data);
     }
 

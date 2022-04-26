@@ -22,14 +22,14 @@
     </tr>
     <tbody>
         <tr style="padding-right: 20px; padding-left: 20px" th:each="trip, iterate: ${tripList}">
-                <td style="padding-right: 20px; padding-left: 20px"><a th:href="@{/trip-user-mapping(tripId=${trip.tripId.tripId})}" th:text="${trip.tripId.tripName}"></a></td>
-                <td style="padding-right: 20px; padding-left: 20px" th:text="${trip.tripId.tripDescription}"></td>
-                <td style="padding-right: 20px; padding-left: 20px" th:text="${trip.tripId.startDate}"></td>
-                <td style="padding-right: 20px; padding-left: 20px" th:text="${trip.tripId.endDate}"></td>
+                <td style="padding-right: 20px; padding-left: 20px"><a th:href="@{/trip-user-mapping(tripId=${trip.trip.tripId})}" th:text="${trip.trip.tripName}"></a></td>
+                <td style="padding-right: 20px; padding-left: 20px" th:text="${trip.trip.tripDescription}"></td>
+                <td style="padding-right: 20px; padding-left: 20px" th:text="${trip.trip.startDate}"></td>
+                <td style="padding-right: 20px; padding-left: 20px" th:text="${trip.trip.endDate}"></td>
                 <td style="padding-right: 20px; padding-left: 20px" th:text="${userCount[__${iterate.index}__]}"></td>
                 <td style="padding-right: 20px; padding-left: 20px" th:text="${activityCount[__${iterate.index}__]}"></td>
                 <td style="padding-right: 20px; padding-left: 20px; padding-top: 15px">
-                    <form th:method="delete" th:action="@{/trip-user-mapping/delete(tripId=${trip.tripId.tripId},userId=${trip.userId.userId})}">
+                    <form th:method="delete" th:action="@{/trip-user-mapping/delete(tripId=${trip.trip.tripId},userId=${trip.user.userId})}">
                         <input type="submit" value="leave trip"/>
                     </form>
                 </td>

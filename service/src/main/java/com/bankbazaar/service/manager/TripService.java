@@ -11,6 +11,7 @@ import com.bankbazaar.dto.model.TripDto;
 import com.bankbazaar.dto.model.TripUserMapDto;
 import com.bankbazaar.service.mapper.TripMapper;
 import com.bankbazaar.service.mapper.TripUserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class TripService {
     @Autowired
@@ -62,9 +64,9 @@ public class TripService {
         List<Integer> activityCount = new ArrayList<>();
         for (TripUserMapEntity trip : tripList)
         {
-            List<TripUserMapEntity> members = tripUserMap.getTripsTripId(trip.getTripId().getTripId());
+            List<TripUserMapEntity> members = tripUserMap.getTripsTripId(trip.getTripId());
             userCount.add(members.size());
-            List<TripActivityEntity> activities = tripActivity.getActivityTripId(trip.getTripId().getTripId());
+            List<TripActivityEntity> activities = tripActivity.getActivityTripId(trip.getTripId());
             activityCount.add(activities.size());
         }
         ModelAndView model = new ModelAndView("trip");
@@ -80,7 +82,6 @@ public class TripService {
         tripUserMapping.setUserId(userService.userDetails(principal).get().getUserId());
         tripUserMapping.setTripId(trip.getTripId());
         tripUserMapping.setUserRole("ADMIN");
-
         tripUserMapManager.saveTripUserMapping(tripUserMapper.dtoToDomain(tripUserMapping));
 
     }

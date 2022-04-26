@@ -53,8 +53,8 @@ public class TripUserMapService {
             Optional<UserEntity> userEntity = userService.getUserDetails(userId);
             Optional<TripEntity> tripEntity = tripService.getTripDetails(tripId);
 
-            tripUserMap.setUserId(userEntity.get());
-            tripUserMap.setTripId(tripEntity.get());
+            tripUserMap.setUserId(userEntity.get().getUserId());
+            tripUserMap.setTripId(tripEntity.get().getTripId());
             tripUserMap.setUserRole(UserRole.USER);
             manager.saveTripUserMapping(tripUserMap);
             return new ResponseEntity<>(HttpStatus.OK);
