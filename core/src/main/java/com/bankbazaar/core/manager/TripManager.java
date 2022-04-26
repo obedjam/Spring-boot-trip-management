@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 @Service
-public class TripEntityManager {
+public class TripManager {
     @Autowired
     private TripRepository tripRepository;
 

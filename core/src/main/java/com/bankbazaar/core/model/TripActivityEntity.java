@@ -17,7 +17,6 @@ import java.util.Date;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="trip_activity")
-@IdClass(TripActivityCompositeKey.class)
 public class TripActivityEntity implements Serializable {
 
     @Id
@@ -25,7 +24,6 @@ public class TripActivityEntity implements Serializable {
     @Column(name="activity_id",nullable = false)
     private Long activityId;
 
-    @Id
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false)
     private TripEntity tripId;

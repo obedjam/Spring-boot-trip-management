@@ -1,46 +1,29 @@
 package com.bankbazaar.service.controller;
-
-import com.bankbazaar.core.manager.UserEntityManager;
-import com.bankbazaar.core.model.UserEntity;
 import com.bankbazaar.dto.model.UserDto;
-import com.bankbazaar.service.manager.DataManager;
-import com.bankbazaar.service.mapper.UserMapper;
+import com.bankbazaar.service.manager.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.Optional;
 
 @Slf4j
 @Controller
 @RequestMapping("/user")
 public class UsersController {
     @Autowired
-    private UserEntityManager manager;
-    @Autowired
-    private DataManager service;
-    @Autowired
-    private UserMapper modelMapper;
+    private UserService userService;
     @RequestMapping(value = "/register",method = RequestMethod.GET)
     public String register(@RequestParam(value = "status", defaultValue = "0") Integer status){
         return "register";
     }
 
     @RequestMapping(value= "/register",method = RequestMethod.POST)
-    public String addUsers( @ModelAttribute UserDto user, HttpServletRequest request) throws Exception{
-        String plainPassword = user.getPassword();
-        UserEntity response = manager.insertUsers(modelMapper.dtoToDomain(user));
-        if(response==null)
-        {
-            return "redirect:/user/register?status=1";
-        }
-        authWithHttpServletRequest(request,user.getEmail(),plainPassword);
-        return "redirect:/user";
+    public String addUser( @ModelAttribute UserDto user, HttpServletRequest request){
+        return userService.addUserService(user, request);
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.GET)
@@ -49,38 +32,16 @@ public class UsersController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addUsers( @ModelAttribute UserDto user, Principal principal) {
-        Optional<UserEntity> data = service.userDetails(principal);
-        user.setUserId(data.get().getUserId());
-        UserEntity response = manager.updateUsers(modelMapper.dtoToDomain(user));
-        if(response==null)
-        {
-            return "redirect:/user/update?status=1";
-        }
-        return "redirect:/user";
+    public String updateService( @ModelAttribute UserDto user, Principal principal) {
+        return userService.updateUserService(user, principal);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getUserDetails(Principal principal) {
-        Optional<UserEntity> userData = manager.getUserByEmail(principal.getName());
-        ModelAndView user;
-        if (userData.isEmpty()) {
-            user = new ModelAndView("logout");
-        }
-        else {
-            user = new ModelAndView("user_account");
-            user.addObject("userData", userData.get());
-        }
-        return user;
+        return  userService.getUserDetailsService(principal);
 
     }
 
 
-    public void authWithHttpServletRequest(HttpServletRequest request, String username, String password) {
-        try {
-            request.login(username, password);
-        } catch (ServletException e) {
-            log.error("Error while login",e);
-        }
-    }
+
 }

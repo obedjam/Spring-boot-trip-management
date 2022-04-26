@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 @Slf4j
 @Service
-public class TripUserMapEntityManager {
+public class TripUserMapManager {
 
     @Autowired
     private TripUserMapRepository tripUserMapRepository;
@@ -56,7 +56,7 @@ public class TripUserMapEntityManager {
      */
     public List<TripUserMapEntity> getTripsUserId(Long userId) {
 
-        return tripUserMapRepository.getByUserId(userId);
+        return tripUserMapRepository.findAllByUserIdUserId(userId);
     }
     /**
      * get all trips using tripId
@@ -64,7 +64,7 @@ public class TripUserMapEntityManager {
      */
     public List<TripUserMapEntity> getTripsTripId(Long tripId) {
 
-        return tripUserMapRepository.getByTripId(tripId);
+        return tripUserMapRepository.findAllByTripIdTripId(tripId);
     }
     /**
      * Delete record by trip_id and user_id

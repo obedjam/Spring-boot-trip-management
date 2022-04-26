@@ -1,6 +1,6 @@
 package com.bankbazaar.core.security;
 
-import com.bankbazaar.core.manager.UserEntityManager;
+import com.bankbazaar.core.manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserEntityManager();
+        return new UserManager();
     }
 
     @Bean

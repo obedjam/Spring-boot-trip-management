@@ -1,5 +1,4 @@
 package com.bankbazaar.dto.model;
-import com.bankbazaar.core.model.ActivityStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

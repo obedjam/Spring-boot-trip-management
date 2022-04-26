@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 @Service
-public class UserEntityManager implements UserDetailsService {
+public class UserManager implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
