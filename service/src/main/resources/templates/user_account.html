@@ -3,7 +3,7 @@
     <title>
         User Account
     </title>
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </head>
 <body>
 <br>
@@ -31,7 +31,11 @@
 <button onclick="updateAccount()">update account</button>
 <br>
 <br>
+<button onclick="createTrip()">trips</button>
+<br>
+<br>
 <button onclick="logout()">logout</button>
+
 
 
 <script>
@@ -40,6 +44,9 @@ function updateAccount(){
 }
 function logout(){
   location.replace("/logout")
+}
+function createTrip(){
+  location.replace("/trips")
 }
 </script>
 </body>

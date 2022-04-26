@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        Create_Trip
+    </title>
+</head>
+<body>
+<br>
+<br>
+<form method="post" th:action="@{/trips}">
+
+    Trip Name:
+    <input type="text" name="tripName" required/><br>
+    <br>
+    Destination:
+    <input type="text" name="destination" maxlength="10" required/><br>
+    <br>
+    Description:
+    <input type="text" name="tripDescription" required /><br>
+    <br>
+    Start Date:
+    <input type="date" name="startDate" required/><br>
+    <br>
+    End Date:
+    <input type="date" name="endDate" required/><br>
+    <br>
+    <input type="submit" value="Submit"/>
+</form>
+</body>
+</html>

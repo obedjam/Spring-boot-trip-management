@@ -18,7 +18,7 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="trip_user_mapping")
 @IdClass(TripUserCompositeKey.class)
-public class TripUserMappingEntity implements Serializable {
+public class TripUserMapEntity implements Serializable,Comparable<TripUserMapEntity> {
     @Id
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false)
@@ -33,13 +33,17 @@ public class TripUserMappingEntity implements Serializable {
     private UserRole userRole;
 
     @CreatedDate
-    @Column(name = "created_date")
+    @Column(name = "created_date",updatable = false)
     private Date createdTime;
 
     @LastModifiedDate
-    @Column(name = "last_modified_date")
+    @Column(name = "last_modified_date",updatable = false)
     private Date lastModifiedTime;
 
+    @Override
+    public int compareTo(TripUserMapEntity tripUserMap) {
+        return getCreatedTime().compareTo(tripUserMap.getCreatedTime());
+    }
 
 
 }

@@ -1,0 +1,62 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        Trip Activities
+    </title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+<br>
+<br>
+<button onclick="addActivity()">create activity</button>
+<br>
+<br>
+<table>
+    <tr>
+        <th style="padding-right: 20px; padding-left: 20px">location</th>
+        <th style="padding-right: 20px; padding-left: 20px">description</th>
+        <th style="padding-right: 20px; padding-left: 20px">activity time</th>
+        <th style="padding-right: 20px; padding-left: 20px">added by</th>
+        <th style="padding-right: 20px; padding-left: 20px">status</th>
+    </tr>
+    <tbody>
+    <tr style="padding-right: 20px; padding-left: 20px" th:each="activity: ${activityList}">
+        <td style="padding-right: 20px; padding-left: 20px" th:text="${activity.location}"></td>
+        <td style="padding-right: 20px; padding-left: 20px" th:text="${activity.activityDescription}"></td>
+        <td style="padding-right: 20px; padding-left: 20px" th:text="${activity.activityTime}"></td>
+        <td style="padding-right: 20px; padding-left: 20px" th:text="${activity.addedBy}"></td>
+        <td style="padding-right: 20px; padding-left: 20px" th:text="${activity.activityStatus}"></td>
+        <td class="view"  style="padding-right: 20px; padding-left: 20px; padding-top: 15px">
+            <form th:method="post" th:action="@{/trip-activity/update(activityId=${activity.activityId},tripId=${activity.tripId.tripId},status=APPROVED)}">
+                <input type="submit" value="approve"/>
+            </form>
+        </td>
+        <td class="view"  style="padding-right: 20px; padding-left: 20px; padding-top: 15px">
+            <form th:method="post" th:action="@{/trip-activity/update(activityId=${activity.activityId},tripId=${activity.tripId.tripId},status=REJECTED)}">
+                <input type="submit" value="reject"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script>
+function addActivity()
+{
+var url_string = window.location.href;
+var url = new URL(url_string);
+var tripId = url.searchParams.get("tripId");
+location.replace("/trip-activity/create?tripId="+tripId)
+}
+</script>
+<script>
+      let role = "[[${role}]]";
+      if(role=="ADMIN")
+      {
+        $(".view").show();
+      }
+      else{
+        $(".view").hide();
+      }
+</script>
+</body>
+</html>

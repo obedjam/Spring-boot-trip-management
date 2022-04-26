@@ -1,61 +1,73 @@
 package com.bankbazaar.service.controller;
 
-import com.bankbazaar.core.manager.TripManager;
+import com.bankbazaar.core.manager.TripActivityEntityManager;
+import com.bankbazaar.core.manager.TripEntityManager;
+import com.bankbazaar.core.manager.TripUserMapEntityManager;
+import com.bankbazaar.core.model.TripActivityEntity;
 import com.bankbazaar.core.model.TripEntity;
+import com.bankbazaar.core.model.TripUserMapEntity;
+import com.bankbazaar.core.model.UserEntity;
 import com.bankbazaar.dto.model.TripDto;
-import org.modelmapper.ModelMapper;
+import com.bankbazaar.service.manager.DataManager;
+import com.bankbazaar.service.mapper.TripMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
-import java.util.Optional;
-@RestController
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
+@Controller
 @RequestMapping("/trips")
 public class TripController {
     @Autowired
-    private TripManager service;
+    private TripEntityManager manager;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private TripUserMapEntityManager tripUserMap;
+    @Autowired
+    private TripActivityEntityManager tripActivity;
+    @Autowired
+    private DataManager service;
+    @Autowired
+    private TripMapper modelMapper;
+
+    @RequestMapping(value = "/create",method = RequestMethod.GET)
+    public String createTrip(){
+        return "create_trip";
+    }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<TripEntity> addTrip(@Valid @RequestBody TripDto trip) {
+    public String addTrip( @ModelAttribute TripDto trip, Principal principal) {
 
-        TripEntity response = service.saveTrip(modelMapper.map(trip, TripEntity.class));
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        TripEntity response = manager.saveTrip(modelMapper.dtoToDomain(trip));
+        service.addAdmin(response, principal);
+
+        return "redirect:/trips";
     }
-
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<TripEntity> findTripById(@RequestParam Long id) {
-
-        Optional<TripEntity> tripData = service.getTripById(id);
-        if (tripData.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(tripData.get(), HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseEntity<TripEntity> deleteTrip(@RequestParam Long id) {
-
-        if (!service.deleteTrip(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<TripEntity> updateTrip(@Valid @RequestBody TripDto trip) {
-
-        TripEntity response = service.saveTrip(modelMapper.map(trip, TripEntity.class));
-        if(response == null)
+    public ModelAndView viewTrip(Principal principal){
+        UserEntity userData = service.userDetails(principal).get();
+        List<TripUserMapEntity> tripList = tripUserMap.getTripsUserId(userData.getUserId());
+        List<Integer> userCount = new ArrayList<>();
+        List<Integer> activityCount = new ArrayList<>();
+        for (TripUserMapEntity trip : tripList)
         {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            List<TripUserMapEntity> members = tripUserMap.getTripsTripId(trip.getTripId().getTripId());
+            userCount.add(members.size());
+            List<TripActivityEntity> activities = tripActivity.getActivityTripId(trip.getTripId().getTripId());
+            activityCount.add(activities.size());
         }
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        ModelAndView model = new ModelAndView("trip");
+        model.addObject("tripList", tripList);
+        model.addObject("userCount", userCount);
+        model.addObject("activityCount", activityCount);
+        return model;
     }
+
 }

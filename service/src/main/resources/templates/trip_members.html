@@ -1,0 +1,134 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        Trip Members
+    </title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+<br>
+<br>
+    User ID:
+    <input type="text" name="userId" id="userId"/><br>
+    <br>
+    <button onclick="addUser()">addUser</button>
+<br>
+<br>
+<table>
+    <tr>
+        <th style="padding-right: 20px; padding-left: 20px">user id</th>
+        <th style="padding-right: 20px; padding-left: 20px">user name</th>
+        <th style="padding-right: 20px; padding-left: 20px">user role</th>
+    </tr>
+    <tbody>
+    <tr style="padding-right: 20px; padding-left: 20px" th:each="user: ${userList}">
+            <td style="padding-right: 20px; padding-left: 20px" th:text="${user.userId.userId}"></td>
+            <td style="padding-right: 20px; padding-left: 20px" th:text="${user.userId.userName}"></td>
+            <td style="padding-right: 20px; padding-left: 20px" th:text="${user.userRole}"></td>
+            <td class="view"  style="padding-right: 20px; padding-left: 20px; padding-top: 15px">
+                <form th:method="delete" th:action="@{/trip-user-mapping/delete(tripId=${user.tripId.tripId},userId=${user.userId.userId})}">
+                    <input type="submit" value="remove"/>
+                </form>
+            </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<div style="display: flex; justify-content: left;">
+<div class="view" style="padding-right: 10px">
+    User ID:
+    <input type="text" name="userId" id="addAdminId"/><br>
+    <br>
+    <button onclick="addAdmin()">add admin</button>
+</div>
+<br>
+<div class="view">
+    User ID:
+    <input type="text" name="userId" id="removeAdminId"/><br>
+    <br>
+    <button onclick="removeAdmin()">remove admin</button>
+</div>
+</div>
+<br>
+<button onclick="activities()">activities</button>
+
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    function addUser(){
+      let userId = document.getElementById("userId").value;
+      let tripId = /*[[${userList[0].tripId.tripId}]]*/;
+      if(userId=="")
+      {
+      alert("Please provide proper user id");
+      }
+      else{
+        $.post(
+          "/trip-user-mapping?tripId="+tripId+"&userId="+userId,
+          function(response){
+          location.replace("/trip-user-mapping?tripId="+tripId);
+}
+          );
+      }
+    }
+/*]]>*/
+</script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    function addAdmin(){
+      let userId = document.getElementById("addAdminId").value;
+      let tripId = /*[[${userList[0].tripId.tripId}]]*/;
+      if(userId=="")
+      {
+      alert("Please provide proper user id");
+      }
+      else{
+        $.post(
+          "/trip-user-mapping/update?tripId="+tripId+"&userId="+userId+"&role=ADMIN",
+          function(response){
+          location.replace("/trip-user-mapping?tripId="+tripId);
+}
+          );
+      }
+    }
+/*]]>*/
+</script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    function removeAdmin(){
+      let userId = document.getElementById("removeAdminId").value;
+      let tripId = /*[[${userList[0].tripId.tripId}]]*/;
+      if(userId=="")
+      {
+      alert("Please provide proper user id");
+      }
+      else{
+        $.post(
+          "/trip-user-mapping/update?tripId="+tripId+"&userId="+userId+"&role=USER",
+          function(response){
+          location.replace("/trip-user-mapping?tripId="+tripId);
+}
+          );
+      }
+    }
+/*]]>*/
+</script>
+<script>
+      let role = "[[${role}]]";
+      if(role=="ADMIN")
+      {
+        $(".view").show();
+      }
+      else{
+        $(".view").hide();
+      }
+</script>
+<script>
+    function activities(){
+      let tripId = [[${userList[0].tripId.tripId}]];
+      location.replace("/trip-activity?tripId="+tripId);
+    }
+</script>
+</body>
+</html>

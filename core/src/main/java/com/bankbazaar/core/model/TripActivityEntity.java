@@ -17,14 +17,17 @@ import java.util.Date;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="trip_activity")
+@IdClass(TripActivityCompositeKey.class)
 public class TripActivityEntity implements Serializable {
-    @Id
-    @Column(name="trip_id",nullable = false)
-    private Long id;
 
-    @MapsId
+    @Id
+    @GeneratedValue
+    @Column(name="activity_id",nullable = false)
+    private Long activityId;
+
+    @Id
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false)
     private TripEntity tripId;
 
     @Column(name="activity_description",nullable = false)
@@ -40,14 +43,14 @@ public class TripActivityEntity implements Serializable {
     private Long addedBy;
 
     @Column(name="activity_status",nullable = false)
-    private Integer activityStatus;
+    private ActivityStatus activityStatus;
 
     @CreatedDate
-    @Column(name = "created_date")
+    @Column(name = "created_date",updatable = false)
     private Date createdTime;
 
     @LastModifiedDate
-    @Column(name = "last_modified_date")
+    @Column(name = "last_modified_date",updatable = false)
     private Date lastModifiedTime;
 
 }

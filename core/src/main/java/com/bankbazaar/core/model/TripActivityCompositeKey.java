@@ -1,16 +1,16 @@
-package com.bankbazaar.dto.model;
+package com.bankbazaar.core.model;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TripUserMappingDto {
-
+public class TripActivityCompositeKey implements Serializable {
     private Long tripId;
-    private Long userId;
-    private String userRole;
-
+    private Long activityId;
 }

@@ -1,6 +1,6 @@
 package com.bankbazaar.core.security;
 
-import com.bankbazaar.core.manager.UsersManager;
+import com.bankbazaar.core.manager.UserEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UsersManager();
+        return new UserEntityManager();
     }
 
     @Bean
@@ -57,7 +57,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/","/user/register").permitAll()
                 .anyRequest().authenticated()
                 .and()

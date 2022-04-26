@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        Create Activity
+    </title>
+</head>
+<body>
+<br>
+<br>
+<form method="post" th:action="@{/trip-activity(tripId=${tripId})}">
+    Description:
+    <input type="text" name="activityDescription" required/><br>
+    <br>
+    Location:
+    <input type="text" name="location" required/><br>
+    <br>
+    Activity time:
+    <input type="date" name="activityTime" required/><br>
+    <br>
+    <input type="submit" value="Submit"/>
+</form>
+</body>
+</html>
