@@ -1,4 +1,4 @@
-package com.bankbazaar.service.manager;
+package com.bankbazaar.service.service;
 
 import com.bankbazaar.core.manager.UserManager;
 import com.bankbazaar.core.model.UserEntity;
