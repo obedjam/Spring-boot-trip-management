@@ -15,9 +15,9 @@ import java.util.Date;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="users")
+@NoArgsConstructor
 public class UserEntity implements Serializable {
     @Id
     @GeneratedValue
@@ -41,11 +41,11 @@ public class UserEntity implements Serializable {
     private String phone;
 
     @CreatedDate
-    @Column(name = "created_date")
+    @Column(name = "created_date",updatable = false)
     private Date createdTime;
 
     @LastModifiedDate
-    @Column(name = "last_modified_date")
+    @Column(name = "last_modified_date",updatable = false)
     private Date lastModifiedTime;
 
 }

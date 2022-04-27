@@ -15,36 +15,28 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name="trip_activity")
+@Table(name="trip_user_mapping")
+@IdClass(TripUserCompositeKey.class)
 @NoArgsConstructor
-public class TripActivityEntity implements Serializable {
-
+public class TripUserMapEntity implements Serializable,Comparable<TripUserMapEntity> {
     @Id
-    @GeneratedValue
-    @Column(name="activity_id",nullable = false)
-    private Long activityId;
-
     @Column(name = "trip_id", nullable = false )
     private Long tripId;
+
+    @Id
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false)
     private TripEntity trip;
 
-    @Column(name="activity_description",nullable = false)
-    private String activityDescription;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    private UserEntity user;
 
-    @Column(name="location",nullable = false)
-    private String location;
-
-    @Column(name="activity_time",nullable = false)
-    private Date activityTime;
-
-    @Column(name="added_by",nullable = false)
-    private Long addedBy;
-
-    @Column(name="activity_status",nullable = false)
-    private ActivityStatus activityStatus;
+    @Column(name="user_role",nullable = false)
+    private UserRole userRole;
 
     @CreatedDate
     @Column(name = "created_date",updatable = false)
@@ -53,5 +45,11 @@ public class TripActivityEntity implements Serializable {
     @LastModifiedDate
     @Column(name = "last_modified_date",updatable = false)
     private Date lastModifiedTime;
+
+    @Override
+    public int compareTo(TripUserMapEntity tripUserMap) {
+        return getCreatedTime().compareTo(tripUserMap.getCreatedTime());
+    }
+
 
 }

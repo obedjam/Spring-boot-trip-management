@@ -22,9 +22,9 @@
 	<properties>
 		<java.version>11</java.version>
 		<spring-boot-starter-validation.version>2.6.6</spring-boot-starter-validation.version>
-		<modelmapper.version>3.1.0</modelmapper.version>
 		<spring-boot-starter-thymeleaf.version>2.6.6</spring-boot-starter-thymeleaf.version>
 		<logback-classic.version>1.2.3</logback-classic.version>
+		<mapstruct.version>1.5.0.RC1</mapstruct.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -66,11 +66,6 @@
 			<version> ${spring-boot-starter-validation.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>${modelmapper.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 			<version>${spring-boot-starter-thymeleaf.version}</version>
@@ -80,6 +75,11 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${logback-classic.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -87,16 +87,25 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<excludes>
-						<exclude>
+					<annotationProcessorPaths>
+						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+							<version>${lombok.version}</version>
+						</path>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${mapstruct.version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

@@ -1,0 +1,45 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        Trips
+    </title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+<br>
+<br>
+<button onclick="createTrip()">create trip</button>
+<br>
+<br>
+<table>
+    <tr>
+        <th style="padding-right: 20px; padding-left: 20px">trip name</th>
+        <th style="padding-right: 20px; padding-left: 20px">trip description</th>
+        <th style="padding-right: 20px; padding-left: 20px">trip start date</th>
+        <th style="padding-right: 20px; padding-left: 20px">trip end date</th>
+        <th style="padding-right: 20px; padding-left: 20px">members</th>
+        <th style="padding-right: 20px; padding-left: 20px">activities</th>
+    </tr>
+    <tbody>
+        <tr style="padding-right: 20px; padding-left: 20px" th:each="trip, iterate: ${tripList}">
+                <td style="padding-right: 20px; padding-left: 20px"><a th:href="@{/trip-user-mapping(tripId=${trip.trip.tripId})}" th:text="${trip.trip.tripName}"></a></td>
+                <td style="padding-right: 20px; padding-left: 20px" th:text="${trip.trip.tripDescription}"></td>
+                <td style="padding-right: 20px; padding-left: 20px" th:text="${trip.trip.startDate}"></td>
+                <td style="padding-right: 20px; padding-left: 20px" th:text="${trip.trip.endDate}"></td>
+                <td style="padding-right: 20px; padding-left: 20px" th:text="${userCount[__${iterate.index}__]}"></td>
+                <td style="padding-right: 20px; padding-left: 20px" th:text="${activityCount[__${iterate.index}__]}"></td>
+                <td style="padding-right: 20px; padding-left: 20px; padding-top: 15px">
+                    <form th:method="delete" th:action="@{/trip-user-mapping/delete(tripId=${trip.trip.tripId},userId=${trip.user.userId})}">
+                        <input type="submit" value="leave trip"/>
+                    </form>
+                </td>
+        </tr>
+    </tbody>
+</table>
+<script>
+function createTrip(){
+  location.replace("/trips/create")
+}
+</script>
+</body>
+</html>

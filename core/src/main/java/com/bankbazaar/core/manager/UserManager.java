@@ -1,7 +1,7 @@
 package com.bankbazaar.core.manager;
 
 import com.bankbazaar.core.model.UserEntity;
-import com.bankbazaar.core.repository.UsersRepository;
+import com.bankbazaar.core.repository.UserRepository;
 import com.bankbazaar.core.security.LoginUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 @Service
-public class UsersManager implements UserDetailsService {
+public class UserManager implements UserDetailsService {
 
     @Autowired
-    private UsersRepository userRepository;
+    private UserRepository userRepository;
     /**
      * Check if user exists by email
      * @param email
@@ -33,7 +33,7 @@ public class UsersManager implements UserDetailsService {
      *  Insert to Users table
      * @param data
      */
-    public UserEntity insertUsers(UserEntity data)
+    public UserEntity insertUser(UserEntity data)
     {
         Optional<UserEntity> user = userRepository.findByEmail(data.getEmail());
         if(user.isEmpty())
@@ -50,68 +50,64 @@ public class UsersManager implements UserDetailsService {
      *  Update to Users table
      * @param data
      */
-    public UserEntity updateUsers(UserEntity data)
+    public UserEntity updateUser
+    (UserEntity data)
     {
         Optional<UserEntity> presentData = exists(data.getUserId());
         Optional<UserEntity> user = userRepository.findByEmail(data.getEmail());
         if (user.isEmpty()) {
-            /**
-             * Here we update the object inside the optional presentData
-             * the object consists of the current user data
-             * @data has the updated details.
-             * updateData method updates the presentData with the new details from data
-             * then we save the updated data in presentData to DB
-             */
-            updateData(presentData.get(), data);
-            return userRepository.save(presentData.get());
+            UserEntity newData = updateData(presentData.get(), data);
+            return userRepository.save(newData);
         }
         return null;
     }
     /**
      * Get record by ID
      */
-    public Optional<UserEntity> getUsersById(String email) {
+    public Optional<UserEntity> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public Optional<UserEntity> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-    /**
-     * Delete record by id
-     * @param id
-     */
-    public Boolean deleteUsers(Long id) {
-        if(exists(id).isPresent())
-        {
-            userRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
+
 
     private Optional<UserEntity> exists(Long id)
     {
         return userRepository.findById(id);
     }
 
-    public void updateData(UserEntity presentData, UserEntity user)
+    private UserEntity updateData(UserEntity presentData, UserEntity user)
     {
+        UserEntity newData = new UserEntity();
+        newData.setUserId(presentData.getUserId());
         if(!user.getUserName().isBlank())
         {
-            presentData.setUserName(user.getUserName());
+            newData.setUserName(user.getUserName());
         }
+        else{newData.setUserName(presentData.getUserName());}
         if(user.getDob()!=null)
         {
-            presentData.setDob(user.getDob());
+            newData.setDob(user.getDob());
         }
+        else{newData.setDob(presentData.getDob());}
         if(!user.getEmail().isBlank())
         {
-            presentData.setEmail(user.getEmail());
+            newData.setEmail(user.getEmail());
         }
+        else{newData.setEmail(presentData.getEmail());}
         if(!user.getPassword().isBlank())
         {
-            presentData.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+            newData.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         }
+        else{newData.setPassword(presentData.getPassword());}
         if(!user.getPhone().isBlank())
         {
-            presentData.setPhone(user.getPhone());
+            newData.setPhone(user.getPhone());
         }
+        else {newData.setPhone(presentData.getPhone());}
+
+        return newData;
     }
 }

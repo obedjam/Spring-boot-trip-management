@@ -1,5 +1,4 @@
 package com.bankbazaar.dto.model;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,10 +6,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TripUserMappingDto {
+public class TripUserMapDto {
 
     private Long tripId;
     private Long userId;
     private String userRole;
+
 
 }

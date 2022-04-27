@@ -2,14 +2,21 @@ package com.bankbazaar.core.manager;
 
 import com.bankbazaar.core.model.TripActivityEntity;
 import com.bankbazaar.core.repository.TripActivityRepository;
+import com.bankbazaar.core.repository.TripRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+@Slf4j
 @Service
 public class TripActivityManager {
     @Autowired
     private TripActivityRepository tripActivityRepository;
+
+    @Autowired
+    private TripRepository tripRepository;
 
     /**
      * Insert to TripActivity table
@@ -17,62 +24,64 @@ public class TripActivityManager {
      */
     public TripActivityEntity saveTripActivity(TripActivityEntity data)
     {
-        if(data.getTripId()==null) {
-            return tripActivityRepository.save(data);
-        }
-        else{
-            Optional<TripActivityEntity> presentData = exists(data.getTripId().getTripId());
-            if(presentData.isPresent())
-            {
-                updateData(presentData.get(), data);
-                return tripActivityRepository.save(presentData.get());
+        return tripActivityRepository.save(data);
+    }
 
-            }
-            return null;
-        }
-    }
     /**
-     * Get record by ID
+     * update to TripActivity table
+     * @param data
      */
-    public Optional<TripActivityEntity> getTripActivityById(Long id) {
-        return tripActivityRepository.findById(id);
-    }
-    /**
-     * Delete record by id
-     *
-     * @param id
-     */
-    public boolean deleteTripActivity(Long id) {
-        if(exists(id).isPresent())
+    public TripActivityEntity updateTripActivity(TripActivityEntity data)
+    {
+        Optional<TripActivityEntity> presentData = exists(data.getActivityId());
+        if(presentData.isPresent())
         {
-            tripActivityRepository.deleteById(id);
-            return true;
+            TripActivityEntity newData = updateData(presentData.get(), data);
+            return tripActivityRepository.save(newData);
+
         }
-        return false;
+        return null;
     }
 
-    private Optional<TripActivityEntity> exists(Long id)
-    {
-        return tripActivityRepository.findById(id);
+    /**
+     * get all activities using tripId
+     * @param tripId
+     */
+    public List<TripActivityEntity> getActivityTripId(Long tripId) {
+
+        return tripActivityRepository.findAllByTripId(tripId);
     }
 
-    public void updateData(TripActivityEntity presentData, TripActivityEntity tripActivity)
+    private Optional<TripActivityEntity> exists(Long activityId)
     {
+        return tripActivityRepository.findById(activityId);
+    }
+    private TripActivityEntity updateData(TripActivityEntity presentData, TripActivityEntity tripActivity)
+    {
+        TripActivityEntity newData = new TripActivityEntity();
+        newData.setActivityId(presentData.getActivityId());
+        newData.setTripId(presentData.getTripId());
+        newData.setAddedBy(presentData.getAddedBy());
         if(tripActivity.getActivityStatus()!=null)
         {
-            presentData.setActivityStatus(tripActivity.getActivityStatus());
+            newData.setActivityStatus(tripActivity.getActivityStatus());
         }
-        if(!tripActivity.getActivityDescription().isBlank())
+        else{newData.setActivityStatus(presentData.getActivityStatus());}
+        if(tripActivity.getActivityDescription()!=null)
         {
-            presentData.setActivityDescription(tripActivity.getActivityDescription());
+            newData.setActivityDescription(tripActivity.getActivityDescription());
         }
+        else{newData.setActivityDescription(presentData.getActivityDescription());}
         if(tripActivity.getActivityTime()!=null)
         {
-            presentData.setActivityTime(tripActivity.getActivityTime());
+            newData.setActivityTime(tripActivity.getActivityTime());
         }
-        if(!tripActivity.getLocation().isBlank())
+        else {newData.setActivityTime(presentData.getActivityTime());}
+        if(tripActivity.getLocation()!=null)
         {
-            presentData.setLocation(tripActivity.getLocation());
+            newData.setLocation(tripActivity.getLocation());
         }
+        else {newData.setLocation(presentData.getLocation());}
+        return newData;
     }
 }

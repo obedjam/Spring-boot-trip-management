@@ -15,9 +15,9 @@ import java.util.Date;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="trip")
+@NoArgsConstructor
 public class TripEntity implements Serializable {
     @Id
     @GeneratedValue
@@ -42,11 +42,11 @@ public class TripEntity implements Serializable {
     private Date endDate;
 
     @CreatedDate
-    @Column(name = "created_date")
+    @Column(name = "created_date",updatable = false)
     private Date createdTime;
 
     @LastModifiedDate
-    @Column(name = "last_modified_date")
+    @Column(name = "last_modified_date",updatable = false)
     private Date lastModifiedTime;
 
 }

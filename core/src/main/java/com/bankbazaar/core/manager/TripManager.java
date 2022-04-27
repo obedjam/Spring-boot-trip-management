@@ -24,8 +24,8 @@ public class TripManager {
             Optional<TripEntity> presentData = exists(data.getTripId());
             if(presentData.isPresent())
             {
-                updateData(presentData.get(),data);
-                return tripRepository.save(presentData.get());
+                TripEntity newData = updateData(presentData.get(),data);
+                return tripRepository.save(newData);
             }
             return null;
         }
@@ -36,46 +36,41 @@ public class TripManager {
     public Optional<TripEntity> getTripById(Long id) {
         return tripRepository.findById(id);
     }
-    /**
-     * Delete record by id
-     *
-     * @param id
-     */
-    public boolean deleteTrip(Long id) {
-        if(exists(id).isPresent())
-        {
-            tripRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
 
     private Optional<TripEntity> exists(Long id)
     {
         return tripRepository.findById(id);
     }
 
-    public void updateData(TripEntity presentData, TripEntity trip)
+    private TripEntity updateData(TripEntity presentData, TripEntity trip)
     {
+        TripEntity newData = new TripEntity();
+        newData.setTripId(presentData.getTripId());
         if(!trip.getTripName().isBlank())
         {
-            presentData.setTripName(trip.getTripName());
+            newData.setTripName(trip.getTripName());
         }
+        else {newData.setTripName(presentData.getTripName());}
         if(!trip.getTripDescription().isBlank())
         {
-            presentData.setTripDescription(trip.getTripDescription());
+            newData.setTripDescription(trip.getTripDescription());
         }
+        else{newData.setTripDescription(presentData.getTripDescription());}
         if(!trip.getDestination().isBlank())
         {
-            presentData.setDestination(trip.getDestination());
+            newData.setDestination(trip.getDestination());
         }
+        else{newData.setDestination(presentData.getDestination());}
         if(trip.getStartDate()!=null)
         {
-            presentData.setStartDate(trip.getStartDate());
+            newData.setStartDate(trip.getStartDate());
         }
+        else{newData.setStartDate(presentData.getStartDate());}
         if(trip.getEndDate()!=null)
         {
-            presentData.setEndDate(trip.getEndDate());
+            newData.setEndDate(trip.getEndDate());
         }
+        else{newData.setEndDate(presentData.getEndDate());}
+        return newData;
     }
 }
