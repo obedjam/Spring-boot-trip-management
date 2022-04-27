@@ -1,5 +1,6 @@
 package com.bankbazaar.service.controller;
 
+import com.bankbazaar.core.model.TripEntity;
 import com.bankbazaar.dto.model.TripDto;
 import com.bankbazaar.service.manager.TripService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,8 @@ public class TripController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String addTrip( @ModelAttribute TripDto trip, Principal principal) {
-        return tripService.addTripService(trip, principal);
+        tripService.addTripService(trip, principal);
+        return "redirect:/trips";
     }
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView viewTrip(Principal principal){

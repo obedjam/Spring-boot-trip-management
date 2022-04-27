@@ -49,7 +49,7 @@ public class TripActivityManager {
      */
     public List<TripActivityEntity> getActivityTripId(Long tripId) {
 
-        return tripActivityRepository.findAllByTripIdTripId(tripId);
+        return tripActivityRepository.findAllByTripId(tripId);
     }
 
     private Optional<TripActivityEntity> exists(Long activityId)

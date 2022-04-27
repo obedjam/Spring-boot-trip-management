@@ -46,27 +46,18 @@ public class TripUserMapService {
         return model;
     }
 
-    public ResponseEntity<String> addUsersService(Long tripId, Long userId) {
+    public TripUserMapDto addUsersService(Long tripId, Long userId) {
 
-        if(manager.exists(tripId,userId).isEmpty()) {
             TripUserMapEntity tripUserMap = new TripUserMapEntity();
-            Optional<UserEntity> userEntity = userService.getUserDetails(userId);
-            Optional<TripEntity> tripEntity = tripService.getTripDetails(tripId);
-
-            tripUserMap.setUserId(userEntity.get().getUserId());
-            tripUserMap.setTripId(tripEntity.get().getTripId());
+            tripUserMap.setTripId(tripId);
+            tripUserMap.setUserId(userId);
             tripUserMap.setUserRole(UserRole.USER);
-            manager.saveTripUserMapping(tripUserMap);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        else{
-
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+            TripUserMapEntity response = manager.saveTripUserMapping(tripUserMap);
+            return modelMapper.domainToDto(response);
 
     }
 
-    public String deleteUsersService(Long tripId, Long userId) {
+    public void deleteUsersService(Long tripId, Long userId) {
 
         manager.deleteTripUserMapping(tripId,userId);
         List<TripUserMapEntity> userList = manager.getTripsTripId(tripId);
@@ -86,12 +77,11 @@ public class TripUserMapService {
                 firstUser.setUserRole(UserRole.ADMIN);
                 manager.updateTripUserMapping(firstUser);
             }
-            catch (Exception e){return "redirect:/trip-user-mapping?tripId="+tripId;}
+            catch (Exception e){return;}
         }
-        return "redirect:/trip-user-mapping?tripId="+tripId;
     }
 
-    public ResponseEntity<TripUserMapEntity> updateUsersService(Long tripId, Long userId,String role) {
+    public TripUserMapDto updateUsersService(Long tripId, Long userId,String role) {
 
         if(manager.exists(tripId,userId).isPresent()) {
             TripUserMapDto tripUserMap = new TripUserMapDto();
@@ -99,11 +89,11 @@ public class TripUserMapService {
             tripUserMap.setUserId(userId);
             tripUserMap.setUserRole(role);
             TripUserMapEntity response = manager.saveTripUserMapping(modelMapper.dtoToDomain(tripUserMap));
-            return new ResponseEntity<>(response,HttpStatus.OK);
+            return modelMapper.domainToDto(response);
         }
         else
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return null;
         }
     }
 }

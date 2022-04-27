@@ -1,4 +1,5 @@
 package com.bankbazaar.service.controller;
+import com.bankbazaar.core.model.UserEntity;
 import com.bankbazaar.dto.model.UserDto;
 import com.bankbazaar.service.manager.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,23 +24,43 @@ public class UsersController {
 
     @RequestMapping(value= "/register",method = RequestMethod.POST)
     public String addUser( @ModelAttribute UserDto user, HttpServletRequest request){
-        return userService.addUserService(user, request);
+        String plainPassword = user.getPassword();
+        UserDto response = userService.addUserService(user, request);
+        if(response==null)
+        {
+            return "redirect:/user/register?status=1";
+        }
+        userService.authWithHttpServletRequest(request,user.getEmail(),plainPassword);
+        return "redirect:/user";
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.GET)
-    public String update(@RequestParam(value = "status", defaultValue = "0") Integer status){
+    public String updateUserPage(@RequestParam(value = "status", defaultValue = "0") Integer status){
         return "update_account";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String updateService( @ModelAttribute UserDto user, Principal principal) {
-        return userService.updateUserService(user, principal);
+    public String updateUserData( @ModelAttribute UserDto user, Principal principal) {
+        UserDto response = userService.updateUserService(user, principal);
+        if(response==null)
+        {
+            return "redirect:/user/update?status=1";
+        }
+        return "redirect:/user";
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getUserDetails(Principal principal) {
-        return  userService.getUserDetailsService(principal);
-
+        UserDto response = userService.getUserDetailsService(principal);
+        ModelAndView user;
+        if (response==null) {
+            user = new ModelAndView("logout");
+        }
+        else {
+            user = new ModelAndView("user_account");
+            user.addObject("userData", response);
+        }
+        return user;
     }
 
 

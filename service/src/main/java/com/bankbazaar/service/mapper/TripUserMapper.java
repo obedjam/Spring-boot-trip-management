@@ -9,4 +9,6 @@ public interface TripUserMapper {
 
     TripUserMapEntity dtoToDomain(TripUserMapDto dto);
 
+    TripUserMapDto domainToDto(TripUserMapEntity entity);
+
 }

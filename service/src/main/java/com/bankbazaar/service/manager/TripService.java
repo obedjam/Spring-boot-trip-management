@@ -48,13 +48,13 @@ public class TripService {
 
     }
 
-    public String addTripService(TripDto trip, Principal principal) {
+    public TripDto addTripService(TripDto trip, Principal principal) {
 
 
         TripEntity response = manager.saveTrip(modelMapper.dtoToDomain(trip));
         addAdmin(response, principal);
 
-        return "redirect:/trips";
+        return  modelMapper.domainToDto(response);
     }
 
     public ModelAndView viewTripService(Principal principal){

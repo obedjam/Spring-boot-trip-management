@@ -35,49 +35,29 @@ public class UserService {
 
     public Optional<UserEntity> userDetails(Principal principal)
     {
-        Optional<UserEntity> userData = userManager.getUserByEmail(principal.getName());
-        return userData;
+        return userManager.getUserByEmail(principal.getName());
     }
 
     public Optional<UserEntity> getUserDetails(Long userId)
     {
-        Optional<UserEntity> userData = userManager.getUserById(userId);
-        return userData;
+        return userManager.getUserById(userId);
     }
 
-    public String addUserService(UserDto user, HttpServletRequest request){
-        String plainPassword = user.getPassword();
-        UserEntity response = manager.insertUsers(modelMapper.dtoToDomain(user));
-        if(response==null)
-        {
-            return "redirect:/user/register?status=1";
-        }
-        authWithHttpServletRequest(request,user.getEmail(),plainPassword);
-        return "redirect:/user";
+    public UserDto addUserService(UserDto user, HttpServletRequest request){
+        UserEntity response = manager.insertUser(modelMapper.dtoToDomain(user));
+        return  modelMapper.domainToDto(response);
     }
 
-    public String updateUserService(UserDto user, Principal principal) {
+    public UserDto updateUserService(UserDto user, Principal principal) {
         Optional<UserEntity> data = userDetails(principal);
         user.setUserId(data.get().getUserId());
-        UserEntity response = manager.updateUsers(modelMapper.dtoToDomain(user));
-        if(response==null)
-        {
-            return "redirect:/user/update?status=1";
-        }
-        return "redirect:/user";
+        UserEntity response = manager.updateUser(modelMapper.dtoToDomain(user));
+        return  modelMapper.domainToDto(response);
+
     }
 
-    public ModelAndView getUserDetailsService(Principal principal) {
-        Optional<UserEntity> userData = manager.getUserByEmail(principal.getName());
-        ModelAndView user;
-        if (userData.isEmpty()) {
-            user = new ModelAndView("logout");
-        }
-        else {
-            user = new ModelAndView("user_account");
-            user.addObject("userData", userData.get());
-        }
-        return user;
-
+    public UserDto getUserDetailsService(Principal principal) {
+        UserEntity response = manager.getUserByEmail(principal.getName()).get();
+        return modelMapper.domainToDto(response);
     }
 }

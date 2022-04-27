@@ -2,9 +2,12 @@ package com.bankbazaar.service.controller;
 
 
 import com.bankbazaar.core.model.TripUserMapEntity;
+import com.bankbazaar.core.model.UserRole;
+import com.bankbazaar.dto.model.TripUserMapDto;
 import com.bankbazaar.service.manager.TripUserMapService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,16 +31,33 @@ public class TripUserMapController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> addUsers( @RequestParam Long tripId,@RequestParam Long userId) {
-        return tripUserMapService.addUsersService(tripId, userId);
+        if(tripUserMapService.addUsersService(tripId,userId)!=null) {
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else{
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value="/delete",method = RequestMethod.POST)
     public String deleteUsers(@RequestParam Long tripId, @RequestParam Long userId) {
-        return  tripUserMapService.deleteUsersService(tripId,userId);
+        tripUserMapService.deleteUsersService(tripId,userId);
+        return "redirect:/trip-user-mapping?tripId="+tripId;
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<TripUserMapEntity> updateUsers( @RequestParam Long tripId, @RequestParam Long userId, @RequestParam String role) {
-        return tripUserMapService.updateUsersService(tripId,userId,role);
+    public ResponseEntity<TripUserMapDto> updateUsers( @RequestParam Long tripId, @RequestParam Long userId, @RequestParam String role) {
+
+        TripUserMapDto response = tripUserMapService.updateUsersService(tripId, userId, role);
+        if(response==null)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else
+        {
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }
     }
 }

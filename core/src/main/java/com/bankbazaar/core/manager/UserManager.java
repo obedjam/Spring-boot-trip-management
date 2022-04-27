@@ -33,7 +33,7 @@ public class UserManager implements UserDetailsService {
      *  Insert to Users table
      * @param data
      */
-    public UserEntity insertUsers(UserEntity data)
+    public UserEntity insertUser(UserEntity data)
     {
         Optional<UserEntity> user = userRepository.findByEmail(data.getEmail());
         if(user.isEmpty())
@@ -50,7 +50,7 @@ public class UserManager implements UserDetailsService {
      *  Update to Users table
      * @param data
      */
-    public UserEntity updateUsers(UserEntity data)
+    public UserEntity updateUser(UserEntity data)
     {
         Optional<UserEntity> presentData = exists(data.getUserId());
         Optional<UserEntity> user = userRepository.findByEmail(data.getEmail());

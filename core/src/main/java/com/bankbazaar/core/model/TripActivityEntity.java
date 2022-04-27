@@ -24,9 +24,12 @@ public class TripActivityEntity implements Serializable {
     @Column(name="activity_id",nullable = false)
     private Long activityId;
 
+    @Column(name = "trip_id", nullable = false )
+    private Long tripId;
+
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", nullable = false)
-    private TripEntity tripId;
+    @JoinColumn(name="trip_id", referencedColumnName = "trip_id", insertable = false, updatable = false)
+    private TripEntity trip;
 
     @Column(name="activity_description",nullable = false)
     private String activityDescription;
