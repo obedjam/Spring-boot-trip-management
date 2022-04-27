@@ -1,16 +1,12 @@
 package com.bankbazaar.service.manager;
 
 import com.bankbazaar.core.manager.TripUserMapManager;
-import com.bankbazaar.core.model.TripEntity;
 import com.bankbazaar.core.model.TripUserMapEntity;
-import com.bankbazaar.core.model.UserEntity;
 import com.bankbazaar.core.model.UserRole;
 import com.bankbazaar.dto.model.TripUserMapDto;
 import com.bankbazaar.service.mapper.TripUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 

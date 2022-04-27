@@ -1,6 +1,5 @@
 package com.bankbazaar.service.controller;
 
-import com.bankbazaar.core.model.TripEntity;
 import com.bankbazaar.dto.model.TripDto;
 import com.bankbazaar.service.manager.TripService;
 import lombok.extern.slf4j.Slf4j;

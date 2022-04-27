@@ -1,8 +1,6 @@
 package com.bankbazaar.service.controller;
 
 
-import com.bankbazaar.core.model.TripUserMapEntity;
-import com.bankbazaar.core.model.UserRole;
 import com.bankbazaar.dto.model.TripUserMapDto;
 import com.bankbazaar.service.manager.TripUserMapService;
 import lombok.extern.slf4j.Slf4j;

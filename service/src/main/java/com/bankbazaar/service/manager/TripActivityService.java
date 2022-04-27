@@ -1,18 +1,14 @@
 package com.bankbazaar.service.manager;
 
 import com.bankbazaar.core.manager.TripActivityManager;
-import com.bankbazaar.core.manager.TripUserMapManager;
 import com.bankbazaar.core.model.TripActivityEntity;
-import com.bankbazaar.core.model.TripUserMapEntity;
 import com.bankbazaar.dto.model.TripActivityDto;
 import com.bankbazaar.service.mapper.TripActivityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TripActivityService {

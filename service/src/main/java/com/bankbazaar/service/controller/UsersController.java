@@ -1,5 +1,4 @@
 package com.bankbazaar.service.controller;
-import com.bankbazaar.core.model.UserEntity;
 import com.bankbazaar.dto.model.UserDto;
 import com.bankbazaar.service.manager.UserService;
 import lombok.extern.slf4j.Slf4j;
