@@ -24,7 +24,7 @@ public class UsersController {
     @RequestMapping(value= "/register",method = RequestMethod.POST)
     public String addUser( @ModelAttribute UserDto user, HttpServletRequest request){
         String plainPassword = user.getPassword();
-        UserDto response = userService.addUserService(user, request);
+        UserDto response = userService.addUser(user, request);
         if(response==null)
         {
             return "redirect:/user/register?status=1";
@@ -40,7 +40,7 @@ public class UsersController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String updateUserData( @ModelAttribute UserDto user, Principal principal) {
-        UserDto response = userService.updateUserService(user, principal);
+        UserDto response = userService.updateUser(user, principal);
         if(response==null)
         {
             return "redirect:/user/update?status=1";
@@ -50,7 +50,7 @@ public class UsersController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getUserDetails(Principal principal) {
-        UserDto response = userService.getUserDetailsService(principal);
+        UserDto response = userService.getUserDetails(principal);
         ModelAndView user;
         if (response==null) {
             user = new ModelAndView("logout");

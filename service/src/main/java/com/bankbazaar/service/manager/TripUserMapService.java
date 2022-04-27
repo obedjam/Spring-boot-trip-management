@@ -32,7 +32,7 @@ public class TripUserMapService {
     private TripService tripService;
 
 
-    public ModelAndView getTripsService(Long tripId, Principal principal) {
+    public ModelAndView getTrips(Long tripId, Principal principal) {
 
         List<TripUserMapEntity> userList = manager.getTripsTripId(tripId);
         ModelAndView model = new ModelAndView("trip_members");
@@ -42,7 +42,7 @@ public class TripUserMapService {
         return model;
     }
 
-    public TripUserMapDto addUsersService(Long tripId, Long userId) {
+    public TripUserMapDto addUsers(Long tripId, Long userId) {
 
             TripUserMapEntity tripUserMap = new TripUserMapEntity();
             tripUserMap.setTripId(tripId);
@@ -53,7 +53,7 @@ public class TripUserMapService {
 
     }
 
-    public void deleteUsersService(Long tripId, Long userId) {
+    public void deleteUsers(Long tripId, Long userId) {
 
         manager.deleteTripUserMapping(tripId,userId);
         List<TripUserMapEntity> userList = manager.getTripsTripId(tripId);
@@ -77,7 +77,7 @@ public class TripUserMapService {
         }
     }
 
-    public TripUserMapDto updateUsersService(Long tripId, Long userId,String role) {
+    public TripUserMapDto updateUsers(Long tripId, Long userId,String role) {
 
         if(manager.exists(tripId,userId).isPresent()) {
             TripUserMapDto tripUserMap = new TripUserMapDto();

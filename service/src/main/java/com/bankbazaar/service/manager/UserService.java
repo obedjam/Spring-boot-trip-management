@@ -42,12 +42,12 @@ public class UserService {
         return userManager.getUserById(userId);
     }
 
-    public UserDto addUserService(UserDto user, HttpServletRequest request){
+    public UserDto addUser(UserDto user, HttpServletRequest request){
         UserEntity response = manager.insertUser(modelMapper.dtoToDomain(user));
         return  modelMapper.domainToDto(response);
     }
 
-    public UserDto updateUserService(UserDto user, Principal principal) {
+    public UserDto updateUser(UserDto user, Principal principal) {
         Optional<UserEntity> data = userDetails(principal);
         user.setUserId(data.get().getUserId());
         UserEntity response = manager.updateUser(modelMapper.dtoToDomain(user));
@@ -55,7 +55,7 @@ public class UserService {
 
     }
 
-    public UserDto getUserDetailsService(Principal principal) {
+    public UserDto getUserDetails(Principal principal) {
         UserEntity response = manager.getUserByEmail(principal.getName()).get();
         return modelMapper.domainToDto(response);
     }

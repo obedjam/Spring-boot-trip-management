@@ -24,12 +24,12 @@ public class TripUserMapController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getTrips( @RequestParam Long tripId, Principal principal) {
-        return tripUserMapService.getTripsService(tripId,principal);
+        return tripUserMapService.getTrips(tripId,principal);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> addUsers( @RequestParam Long tripId,@RequestParam Long userId) {
-        if(tripUserMapService.addUsersService(tripId,userId)!=null) {
+        if(tripUserMapService.addUsers(tripId,userId)!=null) {
 
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -41,14 +41,14 @@ public class TripUserMapController {
 
     @RequestMapping(value="/delete",method = RequestMethod.POST)
     public String deleteUsers(@RequestParam Long tripId, @RequestParam Long userId) {
-        tripUserMapService.deleteUsersService(tripId,userId);
+        tripUserMapService.deleteUsers(tripId,userId);
         return "redirect:/trip-user-mapping?tripId="+tripId;
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<TripUserMapDto> updateUsers( @RequestParam Long tripId, @RequestParam Long userId, @RequestParam String role) {
 
-        TripUserMapDto response = tripUserMapService.updateUsersService(tripId, userId, role);
+        TripUserMapDto response = tripUserMapService.updateUsers(tripId, userId, role);
         if(response==null)
         {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -32,14 +32,14 @@ public class TripActivityController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String addTrip(@RequestParam Long tripId, @ModelAttribute TripActivityDto tripActivity, Principal principal) {
-        tripActivityService.addTripService(tripId, tripActivity, principal);
+        tripActivityService.addTrip(tripId, tripActivity, principal);
         return "redirect:/trip-activity?tripId="+tripId;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView findTripById(@RequestParam Long tripId,Principal principal) {
         ModelAndView model = new ModelAndView("trip_activity");
-        model.addObject("activityList", tripActivityService.findTripByIdService(tripId,principal));
+        model.addObject("activityList", tripActivityService.findTripById(tripId,principal));
         Optional<TripUserMapEntity> userData = tripUserMap.exists(tripId,userService.userDetails(principal).get().getUserId());
         model.addObject("role",userData.get().getUserRole().toString());
         return model;
@@ -47,7 +47,7 @@ public class TripActivityController {
 
     @RequestMapping(value="/update",method = RequestMethod.POST)
     public String updateTrip(@RequestParam Long activityId, @RequestParam Long tripId, @RequestParam String status) {
-        tripActivityService.updateTripService(activityId, tripId, status);
+        tripActivityService.updateTrip(activityId, tripId, status);
         return "redirect:/trip-activity?tripId="+tripId;
     }
 }

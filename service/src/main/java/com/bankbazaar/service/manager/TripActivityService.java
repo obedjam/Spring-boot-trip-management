@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class TripActivityService {
     private TripActivityManager manager;
 
 
-    public TripActivityDto addTripService(Long tripId, TripActivityDto tripActivity, Principal principal) {
+    public TripActivityDto addTrip(Long tripId, TripActivityDto tripActivity, Principal principal) {
         tripActivity.setTripId(tripId);
         tripActivity.setAddedBy(userService.userDetails(principal).get().getUserId());
         tripActivity.setActivityStatus("PENDING");
@@ -28,13 +29,19 @@ public class TripActivityService {
         return  modelMapper.domainToDto(response);
     }
 
-    public List<TripActivityEntity> findTripByIdService(Long tripId,Principal principal) {
+    public List<TripActivityDto> findTripById(Long tripId,Principal principal) {
 
         List<TripActivityEntity> activityList = manager.getActivityTripId(tripId);
-        return activityList;
+        List<TripActivityDto> activityListDto = new ArrayList<>();
+
+        for(TripActivityEntity tripActivity : activityList)
+        {
+            activityListDto.add(modelMapper.domainToDto(tripActivity));
+        }
+        return activityListDto;
     }
 
-    public TripActivityDto updateTripService(Long activityId, Long tripId, String status) {
+    public TripActivityDto updateTrip(Long activityId, Long tripId, String status) {
 
         TripActivityDto tripActivity = new TripActivityDto();
         tripActivity.setActivityId(activityId);

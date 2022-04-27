@@ -25,12 +25,12 @@ public class TripController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String addTrip( @ModelAttribute TripDto trip, Principal principal) {
-        tripService.addTripService(trip, principal);
+        tripService.addTrip(trip, principal);
         return "redirect:/trips";
     }
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView viewTrip(Principal principal){
-        return tripService.viewTripService(principal);
+        return tripService.viewTrip(principal);
     }
 
 }

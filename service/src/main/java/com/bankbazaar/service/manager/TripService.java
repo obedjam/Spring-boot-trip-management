@@ -48,7 +48,7 @@ public class TripService {
 
     }
 
-    public TripDto addTripService(TripDto trip, Principal principal) {
+    public TripDto addTrip(TripDto trip, Principal principal) {
 
 
         TripEntity response = manager.saveTrip(modelMapper.dtoToDomain(trip));
@@ -57,7 +57,7 @@ public class TripService {
         return  modelMapper.domainToDto(response);
     }
 
-    public ModelAndView viewTripService(Principal principal){
+    public ModelAndView viewTrip(Principal principal){
         UserEntity userData = userService.userDetails(principal).get();
         List<TripUserMapEntity> tripList = tripUserMap.getTripsUserId(userData.getUserId());
         List<Integer> userCount = new ArrayList<>();
