@@ -1,7 +1,7 @@
 package com.bankbazaar.service.controller;
 
 import com.bankbazaar.dto.model.TripDto;
-import com.bankbazaar.service.manager.TripService;
+import com.bankbazaar.service.service.TripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -2,7 +2,7 @@ package com.bankbazaar.service.controller;
 
 
 import com.bankbazaar.dto.model.TripUserMapDto;
-import com.bankbazaar.service.manager.TripUserMapService;
+import com.bankbazaar.service.service.TripUserMapService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,14 +1,10 @@
-package com.bankbazaar.service.manager;
+package com.bankbazaar.service.service;
 
-import com.bankbazaar.core.manager.TripActivityManager;
 import com.bankbazaar.core.manager.TripManager;
 import com.bankbazaar.core.manager.TripUserMapManager;
-import com.bankbazaar.core.model.TripActivityEntity;
-import com.bankbazaar.core.model.TripEntity;
-import com.bankbazaar.core.model.TripUserMapEntity;
-import com.bankbazaar.core.model.UserEntity;
+import com.bankbazaar.core.model.*;
+import com.bankbazaar.dto.model.TripActivityDto;
 import com.bankbazaar.dto.model.TripDto;
-import com.bankbazaar.dto.model.TripUserMapDto;
 import com.bankbazaar.service.mapper.TripMapper;
 import com.bankbazaar.service.mapper.TripUserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +31,7 @@ public class TripService {
     @Autowired
     private TripUserMapManager tripUserMap;
     @Autowired
-    private TripActivityManager tripActivity;
+    private TripActivityService tripActivity;
     @Autowired
     private UserService userService;
     @Autowired
@@ -66,7 +62,7 @@ public class TripService {
         {
             List<TripUserMapEntity> members = tripUserMap.getTripsTripId(trip.getTripId());
             userCount.add(members.size());
-            List<TripActivityEntity> activities = tripActivity.getActivityTripId(trip.getTripId());
+            List<TripActivityDto> activities = tripActivity.findTripActivityById(trip.getTripId(),principal);
             activityCount.add(activities.size());
         }
         ModelAndView model = new ModelAndView("trip");
@@ -78,11 +74,11 @@ public class TripService {
 
     public void addAdmin(TripEntity trip, Principal principal)
     {
-        TripUserMapDto tripUserMapping = new TripUserMapDto();
+        TripUserMapEntity tripUserMapping = new TripUserMapEntity();
         tripUserMapping.setUserId(userService.userDetails(principal).get().getUserId());
         tripUserMapping.setTripId(trip.getTripId());
-        tripUserMapping.setUserRole("ADMIN");
-        tripUserMapManager.saveTripUserMapping(tripUserMapper.dtoToDomain(tripUserMapping));
+        tripUserMapping.setUserRole(UserRole.ADMIN);
+        tripUserMapManager.saveTripUserMapping(tripUserMapping);
 
     }
 }

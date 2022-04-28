@@ -1,6 +1,6 @@
 package com.bankbazaar.service.controller;
 import com.bankbazaar.dto.model.UserDto;
-import com.bankbazaar.service.manager.UserService;
+import com.bankbazaar.service.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

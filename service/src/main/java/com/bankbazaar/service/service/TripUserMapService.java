@@ -1,4 +1,4 @@
-package com.bankbazaar.service.manager;
+package com.bankbazaar.service.service;
 
 import com.bankbazaar.core.manager.TripUserMapManager;
 import com.bankbazaar.core.model.TripUserMapEntity;
@@ -27,9 +27,6 @@ public class TripUserMapService {
 
     @Autowired
     private TripUserMapManager manager;
-
-    @Autowired
-    private TripService tripService;
 
 
     public ModelAndView getTrips(Long tripId, Principal principal) {

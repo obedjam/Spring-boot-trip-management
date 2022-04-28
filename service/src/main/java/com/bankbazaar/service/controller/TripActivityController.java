@@ -3,8 +3,8 @@ package com.bankbazaar.service.controller;
 import com.bankbazaar.core.manager.TripUserMapManager;
 import com.bankbazaar.core.model.TripUserMapEntity;
 import com.bankbazaar.dto.model.TripActivityDto;
-import com.bankbazaar.service.manager.TripActivityService;
-import com.bankbazaar.service.manager.UserService;
+import com.bankbazaar.service.service.TripActivityService;
+import com.bankbazaar.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +32,14 @@ public class TripActivityController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String addTrip(@RequestParam Long tripId, @ModelAttribute TripActivityDto tripActivity, Principal principal) {
-        tripActivityService.addTrip(tripId, tripActivity, principal);
+        tripActivityService.addTripActivity(tripId, tripActivity, principal);
         return "redirect:/trip-activity?tripId="+tripId;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView findTripById(@RequestParam Long tripId,Principal principal) {
         ModelAndView model = new ModelAndView("trip_activity");
-        model.addObject("activityList", tripActivityService.findTripById(tripId,principal));
+        model.addObject("activityList", tripActivityService.findTripActivityById(tripId,principal));
         Optional<TripUserMapEntity> userData = tripUserMap.exists(tripId,userService.userDetails(principal).get().getUserId());
         model.addObject("role",userData.get().getUserRole().toString());
         return model;
@@ -47,7 +47,7 @@ public class TripActivityController {
 
     @RequestMapping(value="/update",method = RequestMethod.POST)
     public String updateTrip(@RequestParam Long activityId, @RequestParam Long tripId, @RequestParam String status) {
-        tripActivityService.updateTrip(activityId, tripId, status);
+        tripActivityService.updateTripActivity(activityId, tripId, status);
         return "redirect:/trip-activity?tripId="+tripId;
     }
 }
