@@ -10,8 +10,6 @@ import com.bankbazaar.dto.model.TripActivityDto;
 import com.bankbazaar.service.mapper.TripActivityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,16 +26,16 @@ public class TripActivityService {
 
 
 
-    public TripActivityDto addTripActivity(Long tripId, TripActivityDto tripActivity, Principal principal) {
+    public TripActivityDto addTripActivity(Long tripId, TripActivityDto tripActivity, Long userId) {
         tripActivity.setTripId(tripId);
-        tripActivity.setAddedBy(userService.userDetails(principal).get().getUserId());
+        tripActivity.setAddedBy(userId);
         tripActivity.setActivityStatus("PENDING");
         TripActivityEntity response = manager.saveTripActivity(modelMapper.dtoToDomain(tripActivity));
         return  modelMapper.domainToDto(response);
     }
 
-    public List<TripActivityDto> findTripActivityById(Long tripId,Principal principal) {
-        UserRole userRole = getUserRole(tripId,userService.userDetails(principal).get().getUserId());
+    public List<TripActivityDto> findTripActivityById(Long tripId,Long userId) {
+        UserRole userRole = getUserRole(tripId,userId);
 
         List<TripActivityEntity> activityList = manager.getActivityTripId(tripId);
         List<TripActivityDto> activityListDto = new ArrayList<>();

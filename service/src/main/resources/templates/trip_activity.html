@@ -27,12 +27,12 @@
         <td style="padding-right: 20px; padding-left: 20px" th:text="${activity.addedBy}"></td>
         <td style="padding-right: 20px; padding-left: 20px" th:text="${activity.activityStatus}"></td>
         <td class="view"  style="padding-right: 20px; padding-left: 20px; padding-top: 15px">
-            <form th:method="post" th:action="@{/trip-activity/update(activityId=${activity.activityId},tripId=${activity.trip.tripId},status=APPROVED)}">
+            <form th:method="post" th:action="@{/trip-activity/update(activityId=${activity.activityId},tripId=${activity.tripId},status=APPROVED)}">
                 <input type="submit" value="approve"/>
             </form>
         </td>
         <td class="view"  style="padding-right: 20px; padding-left: 20px; padding-top: 15px">
-            <form th:method="post" th:action="@{/trip-activity/update(activityId=${activity.activityId},tripId=${activity.trip.tripId},status=REJECTED)}">
+            <form th:method="post" th:action="@{/trip-activity/update(activityId=${activity.activityId},tripId=${activity.tripId},status=REJECTED)}">
                 <input type="submit" value="reject"/>
             </form>
         </td>

@@ -25,6 +25,7 @@
 		<spring-boot-starter-thymeleaf.version>2.6.6</spring-boot-starter-thymeleaf.version>
 		<logback-classic.version>1.2.3</logback-classic.version>
 		<mapstruct.version>1.5.0.RC1</mapstruct.version>
+		<artifactId.version>5.8.2</artifactId.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -79,6 +80,17 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${artifactId.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
