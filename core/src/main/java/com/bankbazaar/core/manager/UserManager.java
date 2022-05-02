@@ -50,12 +50,11 @@ public class UserManager implements UserDetailsService {
      *  Update to Users table
      * @param data
      */
-    public UserEntity updateUser
-    (UserEntity data)
+    public UserEntity updateUser(UserEntity data)
     {
         Optional<UserEntity> presentData = exists(data.getUserId());
         Optional<UserEntity> user = userRepository.findByEmail(data.getEmail());
-        if (user.isEmpty()) {
+        if (user.isPresent()) {
             UserEntity newData = updateData(presentData.get(), data);
             return userRepository.save(newData);
         }

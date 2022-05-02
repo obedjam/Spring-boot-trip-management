@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -29,17 +28,17 @@ public class TripUserMapService {
     private TripUserMapManager manager;
 
 
-    public ModelAndView getTrips(Long tripId, Principal principal) {
+    public ModelAndView getMembers(Long tripId, Long userId) {
 
         List<TripUserMapEntity> userList = manager.getTripsTripId(tripId);
         ModelAndView model = new ModelAndView("trip_members");
         model.addObject("userList", userList);
-        Optional<TripUserMapEntity> userData = manager.exists(tripId,userService.userDetails(principal).get().getUserId());
+        Optional<TripUserMapEntity> userData = manager.exists(tripId, userId);
         model.addObject("role",userData.get().getUserRole().toString());
         return model;
     }
 
-    public TripUserMapDto addUsers(Long tripId, Long userId) {
+    public TripUserMapDto addMember(Long tripId, Long userId) {
 
             TripUserMapEntity tripUserMap = new TripUserMapEntity();
             tripUserMap.setTripId(tripId);
@@ -50,9 +49,9 @@ public class TripUserMapService {
 
     }
 
-    public void deleteUsers(Long tripId, Long userId) {
+    public boolean deleteMember(Long tripId, Long userId) {
 
-        manager.deleteTripUserMapping(tripId,userId);
+        boolean response = manager.deleteTripUserMapping(tripId,userId);
         List<TripUserMapEntity> userList = manager.getTripsTripId(tripId);
         Collections.sort(userList);
         boolean hasAdmin=false;
@@ -70,11 +69,12 @@ public class TripUserMapService {
                 firstUser.setUserRole(UserRole.ADMIN);
                 manager.updateTripUserMapping(firstUser);
             }
-            catch (Exception e){return;}
+            catch (Exception e){return response;}
         }
+        return response;
     }
 
-    public TripUserMapDto updateUsers(Long tripId, Long userId,String role) {
+    public TripUserMapDto updateMember(Long tripId, Long userId,String role) {
 
         if(manager.exists(tripId,userId).isPresent()) {
             TripUserMapDto tripUserMap = new TripUserMapDto();
@@ -84,9 +84,8 @@ public class TripUserMapService {
             TripUserMapEntity response = manager.saveTripUserMapping(modelMapper.dtoToDomain(tripUserMap));
             return modelMapper.domainToDto(response);
         }
-        else
-        {
+
             return null;
-        }
     }
+
 }

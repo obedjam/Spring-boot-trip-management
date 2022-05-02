@@ -1,17 +1,16 @@
 package com.bankbazaar.service.controller;
 
 import com.bankbazaar.core.manager.TripUserMapManager;
-import com.bankbazaar.core.model.TripUserMapEntity;
+import com.bankbazaar.core.security.LoginUserDetails;
 import com.bankbazaar.dto.model.TripActivityDto;
 import com.bankbazaar.service.service.TripActivityService;
 import com.bankbazaar.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.security.Principal;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/trip-activity")
@@ -31,17 +30,16 @@ public class TripActivityController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addTrip(@RequestParam Long tripId, @ModelAttribute TripActivityDto tripActivity, Principal principal) {
-        tripActivityService.addTripActivity(tripId, tripActivity, principal);
+    public String addTrip(@RequestParam Long tripId, @ModelAttribute TripActivityDto tripActivity, @AuthenticationPrincipal LoginUserDetails loginUserDetails) {
+        tripActivityService.addTripActivity(tripId, tripActivity, loginUserDetails.getUserId());
         return "redirect:/trip-activity?tripId="+tripId;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView findTripById(@RequestParam Long tripId,Principal principal) {
+    public ModelAndView findTripById(@RequestParam Long tripId,@AuthenticationPrincipal LoginUserDetails loginUserDetails) {
         ModelAndView model = new ModelAndView("trip_activity");
-        model.addObject("activityList", tripActivityService.findTripActivityById(tripId,principal));
-        Optional<TripUserMapEntity> userData = tripUserMap.exists(tripId,userService.userDetails(principal).get().getUserId());
-        model.addObject("role",userData.get().getUserRole().toString());
+        model.addObject("activityList", tripActivityService.findTripActivityById(tripId,loginUserDetails.getUserId()));
+        model.addObject("role",tripActivityService.getUserRole(tripId,loginUserDetails.getUserId()));
         return model;
     }
 

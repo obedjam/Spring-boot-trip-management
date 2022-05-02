@@ -5,6 +5,7 @@ import com.bankbazaar.core.manager.TripUserMapManager;
 import com.bankbazaar.core.model.*;
 import com.bankbazaar.dto.model.TripActivityDto;
 import com.bankbazaar.dto.model.TripDto;
+import com.bankbazaar.dto.model.UserDto;
 import com.bankbazaar.service.mapper.TripMapper;
 import com.bankbazaar.service.mapper.TripUserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +20,6 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class TripService {
-    @Autowired
-    private TripManager tripManager;
     @Autowired
     private TripMapper modelMapper;
     @Autowired
@@ -38,23 +36,26 @@ public class TripService {
     private TripUserMapManager tripUserMapManager;
 
 
-    public Optional<TripEntity> getTripDetails(Long tripId)
+    public TripDto getTripDetails(Long tripId)
     {
-        return tripManager.getTripById(tripId);
-
+        Optional<TripEntity> response = manager.getTripById(tripId);
+        if(response.isPresent()) {
+            return  modelMapper.domainToDto(response.get());
+        }
+        return  null;
     }
 
-    public TripDto addTrip(TripDto trip, Principal principal) {
+    public TripDto addTrip(TripDto trip, Long userId) {
 
 
         TripEntity response = manager.saveTrip(modelMapper.dtoToDomain(trip));
-        addAdmin(response, principal);
+        addAdmin(response, userId);
 
         return  modelMapper.domainToDto(response);
     }
 
-    public ModelAndView viewTrip(Principal principal){
-        UserEntity userData = userService.userDetails(principal).get();
+    public ModelAndView viewTrip(Long userId){
+        UserDto userData = userService.loggedInUserDetails(userId);
         List<TripUserMapEntity> tripList = tripUserMap.getTripsUserId(userData.getUserId());
         List<Integer> userCount = new ArrayList<>();
         List<Integer> activityCount = new ArrayList<>();
@@ -62,7 +63,7 @@ public class TripService {
         {
             List<TripUserMapEntity> members = tripUserMap.getTripsTripId(trip.getTripId());
             userCount.add(members.size());
-            List<TripActivityDto> activities = tripActivity.findTripActivityById(trip.getTripId(),principal);
+            List<TripActivityDto> activities = tripActivity.findTripActivityById(trip.getTripId(),userId);
             activityCount.add(activities.size());
         }
         ModelAndView model = new ModelAndView("trip");
@@ -72,10 +73,10 @@ public class TripService {
         return model;
     }
 
-    public void addAdmin(TripEntity trip, Principal principal)
+    public void addAdmin(TripEntity trip, Long userId)
     {
         TripUserMapEntity tripUserMapping = new TripUserMapEntity();
-        tripUserMapping.setUserId(userService.userDetails(principal).get().getUserId());
+        tripUserMapping.setUserId(userId);
         tripUserMapping.setTripId(trip.getTripId());
         tripUserMapping.setUserRole(UserRole.ADMIN);
         tripUserMapManager.saveTripUserMapping(tripUserMapping);
