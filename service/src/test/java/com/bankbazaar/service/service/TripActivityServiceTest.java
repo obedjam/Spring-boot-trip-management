@@ -1,15 +1,11 @@
 package com.bankbazaar.service.service;
 
 import com.bankbazaar.core.model.ActivityStatus;
-import com.bankbazaar.core.model.TripUserCompositeKey;
-import com.bankbazaar.core.model.TripUserMapEntity;
-import com.bankbazaar.core.model.UserRole;
 import com.bankbazaar.core.repository.TripActivityRepository;
-import com.bankbazaar.core.repository.TripUserMapRepository;
 import com.bankbazaar.dto.model.TripActivityDto;
 import com.bankbazaar.dto.model.TripDto;
-import com.bankbazaar.dto.model.TripUserMapDto;
 import com.bankbazaar.dto.model.UserDto;
+import com.bankbazaar.service.ServiceModuleTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TripActivityServiceTest {
+class TripActivityServiceTest extends ServiceModuleTest {
 
     @Autowired
     UserService userService;

@@ -5,6 +5,7 @@ import com.bankbazaar.core.repository.TripRepository;
 import com.bankbazaar.core.repository.UserRepository;
 import com.bankbazaar.dto.model.TripDto;
 import com.bankbazaar.dto.model.UserDto;
+import com.bankbazaar.service.ServiceModuleTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
-class TripServiceTest extends TripUserMapServiceTest{
+class TripServiceTest extends ServiceModuleTest {
 
     @Autowired
     TripService service;

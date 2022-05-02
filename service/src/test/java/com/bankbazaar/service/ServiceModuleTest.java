@@ -5,7 +5,6 @@ import com.bankbazaar.core.repository.TripRepository;
 import com.bankbazaar.core.repository.TripUserMapRepository;
 import com.bankbazaar.core.repository.UserRepository;
 import com.bankbazaar.service.service.UserService;
-import com.bankbazaar.service.service.UserServiceTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles({"test"})
-public class ServiceModuleTest extends UserServiceTest {
+public class ServiceModuleTest {
 
     @Autowired
     UserService service;

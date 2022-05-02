@@ -5,6 +5,7 @@ import com.bankbazaar.core.repository.TripUserMapRepository;
 import com.bankbazaar.dto.model.TripDto;
 import com.bankbazaar.dto.model.TripUserMapDto;
 import com.bankbazaar.dto.model.UserDto;
+import com.bankbazaar.service.ServiceModuleTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-class TripUserMapServiceTest extends TripActivityServiceTest{
+class TripUserMapServiceTest extends ServiceModuleTest {
 
     @Autowired
     UserService userService;

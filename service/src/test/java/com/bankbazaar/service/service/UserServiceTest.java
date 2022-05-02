@@ -2,6 +2,7 @@ package com.bankbazaar.service.service;
 
 import com.bankbazaar.core.repository.UserRepository;
 import com.bankbazaar.dto.model.UserDto;
+import com.bankbazaar.service.ServiceModuleTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,7 +13,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 public
-class UserServiceTest extends TripServiceTest{
+class UserServiceTest extends ServiceModuleTest {
 
     @Autowired
     UserService service;

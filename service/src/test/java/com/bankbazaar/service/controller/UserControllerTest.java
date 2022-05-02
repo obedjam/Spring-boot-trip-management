@@ -56,7 +56,6 @@ class UserControllerTest {
 
     @Test
     void userController() throws Exception {
-        assertEquals(userRepository.count(),0);
 
         mvc.perform(get("/user/register"))
                 .andExpect(status().is(200));
@@ -70,6 +69,5 @@ class UserControllerTest {
                 .param("phone", "1234567891"))
                 .andExpect(status().is(302));
 
-        assertEquals(userRepository.count(),1);
     }
 }
