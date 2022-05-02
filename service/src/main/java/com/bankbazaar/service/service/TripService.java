@@ -3,7 +3,6 @@ package com.bankbazaar.service.service;
 import com.bankbazaar.core.manager.TripManager;
 import com.bankbazaar.core.manager.TripUserMapManager;
 import com.bankbazaar.core.model.*;
-import com.bankbazaar.core.security.LoginUserDetails;
 import com.bankbazaar.dto.model.TripActivityDto;
 import com.bankbazaar.dto.model.TripDto;
 import com.bankbazaar.dto.model.UserDto;
@@ -11,11 +10,9 @@ import com.bankbazaar.service.mapper.TripMapper;
 import com.bankbazaar.service.mapper.TripUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,10 +36,13 @@ public class TripService {
     private TripUserMapManager tripUserMapManager;
 
 
-    public Optional<TripEntity> getTripDetails(Long tripId)
+    public TripDto getTripDetails(Long tripId)
     {
-        return manager.getTripById(tripId);
-
+        Optional<TripEntity> response = manager.getTripById(tripId);
+        if(response.isPresent()) {
+            return  modelMapper.domainToDto(response.get());
+        }
+        return  null;
     }
 
     public TripDto addTrip(TripDto trip, Long userId) {

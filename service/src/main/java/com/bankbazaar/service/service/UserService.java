@@ -2,16 +2,13 @@ package com.bankbazaar.service.service;
 
 import com.bankbazaar.core.manager.UserManager;
 import com.bankbazaar.core.model.UserEntity;
-import com.bankbazaar.core.security.LoginUserDetails;
 import com.bankbazaar.dto.model.UserDto;
 import com.bankbazaar.service.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -36,12 +33,12 @@ public class UserService {
     }
 
     public UserDto getUserDetails(String email) {
-        UserEntity response = manager.getUserByEmail(email).get();
-        return modelMapper.domainToDto(response);
+        Optional<UserEntity> response = manager.getUserByEmail(email);
+        return response.map(entity -> modelMapper.domainToDto(entity)).orElse(null);
     }
     public UserDto loggedInUserDetails(Long userId)
     {
-        UserEntity response = manager.getUserById(userId).get();
-        return modelMapper.domainToDto(response);
+        Optional<UserEntity> response = manager.getUserById(userId);
+        return response.map(entity -> modelMapper.domainToDto(entity)).orElse(null);
     }
 }

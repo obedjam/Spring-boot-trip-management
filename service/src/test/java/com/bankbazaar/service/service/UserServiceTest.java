@@ -1,16 +1,9 @@
 package com.bankbazaar.service.service;
 
-import com.bankbazaar.core.repository.TripActivityRepository;
-import com.bankbazaar.core.repository.TripRepository;
-import com.bankbazaar.core.repository.TripUserMapRepository;
 import com.bankbazaar.core.repository.UserRepository;
 import com.bankbazaar.dto.model.UserDto;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,32 +11,18 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Slf4j
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles({"test"})
-class UserServiceTest {
+public
+class UserServiceTest extends TripServiceTest{
 
     @Autowired
     UserService service;
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private TripRepository tripRepository;
-    @Autowired
-    private TripUserMapRepository tripUserMapRepository;
-    @Autowired
-    private TripActivityRepository tripActivityRepository;
 
-
-    @BeforeEach
-    void setUp() throws ParseException {
-        log.info("Executing cleanup");
-        tripUserMapRepository.deleteAll();
-        tripActivityRepository.deleteAll();
-        userRepository.deleteAll();
-        tripRepository.deleteAll();
-
+    @Test
+    void userService() throws ParseException {
+        assertEquals(userRepository.count(),0);
         UserDto userDto =new UserDto();
         userDto.setUserName("name");
         userDto.setPassword("password");
@@ -51,29 +30,39 @@ class UserServiceTest {
         userDto.setDob(date);
         userDto.setEmail("name@mail.com");
         userDto.setPhone("1234567891");
-        service.addUser(userDto);
-    }
+        UserDto newUser = service.addUser(userDto);
 
-    @Test
-    void addUser(){
-        assertEquals(userRepository.count(),1);
-    }
+        assertEquals(1, userRepository.count());
+        validate(userDto, newUser);
 
-    @Test
-    void getUserDetails() throws ParseException {
+        UserDto user = service.getUserDetails(newUser.getEmail());
+        validate(userDto, user);
 
-        UserDto response = service.getUserDetails("name@mail.com");
-        assertNotNull(response);
-    }
+        UserDto loggedInUser = service.loggedInUserDetails(newUser.getUserId());
+        validate(userDto, loggedInUser);
 
-    @Test
-    void updateUser() throws ParseException {
+        UserDto nullUser = service.getUserDetails("null@email");
+        assertNull(nullUser);
 
-        UserDto user =  service.getUserDetails("name@mail.com");
+        UserDto nullLoggedInUser = service.loggedInUserDetails(70L);
+        assertNull(nullLoggedInUser);
+
         user.setUserName("username");
-        UserDto response = service.updateUser(user);
+        UserDto updatedUser = service.updateUser(user);
 
-        assertEquals(userRepository.count(),1);
-        assertEquals(response.getUserName(), user.getUserName());
+        assertEquals(1, userRepository.count());
+        validate(user, updatedUser);
+    }
+
+    void validate(UserDto originalUser, UserDto validateUser)
+    {
+        assertNotNull(validateUser);
+        assertNotNull(validateUser.getUserId());
+        assertEquals(originalUser.getUserName(), validateUser.getUserName());
+        assertNotNull(validateUser.getPassword());
+        assertNotEquals(originalUser.getPassword(),validateUser.getPassword());
+        assertEquals(originalUser.getDob(), validateUser.getDob());
+        assertEquals(originalUser.getEmail(), validateUser.getEmail());
+        assertEquals(originalUser.getPhone(), validateUser.getPhone());
     }
 }

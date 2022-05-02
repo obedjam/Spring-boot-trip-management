@@ -84,10 +84,8 @@ public class TripUserMapService {
             TripUserMapEntity response = manager.saveTripUserMapping(modelMapper.dtoToDomain(tripUserMap));
             return modelMapper.domainToDto(response);
         }
-        else
-        {
+
             return null;
-        }
     }
 
 }

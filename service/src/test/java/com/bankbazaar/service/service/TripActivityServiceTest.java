@@ -1,21 +1,17 @@
 package com.bankbazaar.service.service;
 
 import com.bankbazaar.core.model.ActivityStatus;
+import com.bankbazaar.core.model.TripUserCompositeKey;
 import com.bankbazaar.core.model.TripUserMapEntity;
-import com.bankbazaar.core.model.UserEntity;
+import com.bankbazaar.core.model.UserRole;
 import com.bankbazaar.core.repository.TripActivityRepository;
-import com.bankbazaar.core.repository.TripRepository;
 import com.bankbazaar.core.repository.TripUserMapRepository;
-import com.bankbazaar.core.repository.UserRepository;
 import com.bankbazaar.dto.model.TripActivityDto;
 import com.bankbazaar.dto.model.TripDto;
+import com.bankbazaar.dto.model.TripUserMapDto;
 import com.bankbazaar.dto.model.UserDto;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,9 +20,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Slf4j
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles({"test"})
 class TripActivityServiceTest {
 
     @Autowired
@@ -39,22 +32,15 @@ class TripActivityServiceTest {
     TripActivityService service;
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TripRepository tripRepository;
-    @Autowired
-    private TripUserMapRepository tripUserMapRepository;
+    TripUserMapService tripUserMapService;
+
     @Autowired
     private TripActivityRepository tripActivityRepository;
 
-    @BeforeEach
-    void setUp() throws ParseException {
-        log.info("Executing cleanup");
-        tripUserMapRepository.deleteAll();
-        tripActivityRepository.deleteAll();
-        userRepository.deleteAll();
-        tripRepository.deleteAll();
 
+
+    @Test
+    void tripActivityService() throws ParseException {
         UserDto userDto =new UserDto();
         userDto.setUserName("name");
         userDto.setPassword("password");
@@ -72,55 +58,52 @@ class TripActivityServiceTest {
         tripDto.setStartDate(startDate);
         Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("1998-05-23");
         tripDto.setEndDate(endDate);
-        tripService.addTrip(tripDto, user.getUserId());
-    }
+        TripDto trip = tripService.addTrip(tripDto, user.getUserId());
 
-    @Test
-    void addTripActivity() throws ParseException {
-        UserEntity user = userRepository.findByEmail("name@mail.com").get();
-        List<TripUserMapEntity> tripUserMap = tripUserMapRepository.findAll();
-        TripActivityDto tripActivityDto = new TripActivityDto();
-        tripActivityDto.setActivityStatus("PENDING");
-        tripActivityDto.setActivityDescription("trip activity");
-        Date date = new SimpleDateFormat("yyyy-MM-dd").parse("1998-05-23");
-        tripActivityDto.setActivityTime(date);
-        tripActivityDto.setLocation("park");
+        assertEquals(tripActivityRepository.count(),0);
 
-        service.addTripActivity(tripUserMap.get(0).getTripId(),tripActivityDto,user.getUserId());
+        TripActivityDto tripActivityDto = addActivity();
+
+        TripActivityDto tripActivity = service.addTripActivity(trip.getTripId(),tripActivityDto,user.getUserId());
         assertEquals(tripActivityRepository.count(),1);
+        validate(tripActivityDto, tripActivity);
+
+        List<TripActivityDto> tripList = service.findTripActivityById(trip.getTripId(),user.getUserId());
+        assertEquals(1,tripList.size());
+        validate(tripActivity, tripList.get(0));
+
+        TripActivityDto updatedTripActivity = service.updateTripActivity(tripActivity.getActivityId(),tripActivity.getTripId(),"REJECTED");
+        assertEquals(ActivityStatus.REJECTED.toString(), updatedTripActivity.getActivityStatus());
+
+        tripUserMapService.updateMember(trip.getTripId(),user.getUserId(),"USER");
+
+        TripActivityDto activity = service.addTripActivity(trip.getTripId(),addActivity(),user.getUserId());
+        service.updateTripActivity(activity.getActivityId(),tripActivity.getTripId(),"APPROVED");;
+        List<TripActivityDto> newTripList = service.findTripActivityById(trip.getTripId(),user.getUserId());
+        assertEquals(1,newTripList.size());
+        assertEquals(tripActivityRepository.count(),2);
     }
 
-    @Test
-    void findTripActivityById() throws ParseException {
-        UserEntity user = userRepository.findByEmail("name@mail.com").get();
-        List<TripUserMapEntity> tripUserMap = tripUserMapRepository.findAll();
+    void validate(TripActivityDto originalActivity, TripActivityDto validateActivity)
+    {
+        assertNotNull(validateActivity);
+        assertNotNull(validateActivity.getActivityId());
+        assertNotNull(validateActivity.getTripId());
+        assertNotNull(validateActivity.getActivityStatus());
+        assertEquals(originalActivity.getActivityDescription(), validateActivity.getActivityDescription());
+        assertEquals(originalActivity.getActivityTime(),validateActivity.getActivityTime());
+        assertEquals(originalActivity.getAddedBy(), validateActivity.getAddedBy());
+        assertEquals(originalActivity.getLocation(), validateActivity.getLocation());
+    }
+
+    TripActivityDto addActivity() throws ParseException {
         TripActivityDto tripActivityDto = new TripActivityDto();
         tripActivityDto.setActivityStatus("PENDING");
         tripActivityDto.setActivityDescription("trip activity");
-        Date date = new SimpleDateFormat("yyyy-MM-dd").parse("1998-05-23");
-        tripActivityDto.setActivityTime(date);
+        Date activityDate = new SimpleDateFormat("yyyy-MM-dd").parse("1998-05-23");
+        tripActivityDto.setActivityTime(activityDate);
         tripActivityDto.setLocation("park");
 
-        service.addTripActivity(tripUserMap.get(0).getTripId(),tripActivityDto,user.getUserId());
-
-        List<TripActivityDto> response = service.findTripActivityById(tripUserMap.get(0).getTripId(),user.getUserId());
-        assertEquals(response.size(),1);
-    }
-
-    @Test
-    void updateTripActivity() throws ParseException {
-        UserEntity user = userRepository.findByEmail("name@mail.com").get();
-        List<TripUserMapEntity> tripUserMap = tripUserMapRepository.findAll();
-        TripActivityDto tripActivityDto = new TripActivityDto();
-        tripActivityDto.setActivityStatus("PENDING");
-        tripActivityDto.setActivityDescription("trip activity");
-        Date date = new SimpleDateFormat("yyyy-MM-dd").parse("1998-05-23");
-        tripActivityDto.setActivityTime(date);
-        tripActivityDto.setLocation("park");
-
-        TripActivityDto tripActivity = service.addTripActivity(tripUserMap.get(0).getTripId(),tripActivityDto,user.getUserId());
-        TripActivityDto response = service.updateTripActivity(tripActivity.getActivityId(),tripActivity.getTripId(),"APPROVED");
-
-        assertEquals(ActivityStatus.APPROVED.toString(), response.getActivityStatus());
+        return  tripActivityDto;
     }
 }

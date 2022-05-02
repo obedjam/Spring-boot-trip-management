@@ -1,46 +1,32 @@
 package com.bankbazaar.service.service;
 
-import com.bankbazaar.core.repository.TripActivityRepository;
+
 import com.bankbazaar.core.repository.TripRepository;
-import com.bankbazaar.core.repository.TripUserMapRepository;
 import com.bankbazaar.core.repository.UserRepository;
 import com.bankbazaar.dto.model.TripDto;
 import com.bankbazaar.dto.model.UserDto;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.servlet.ModelAndView;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
-@Slf4j
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles({"test"})
-class TripServiceTest {
+class TripServiceTest extends TripUserMapServiceTest{
 
     @Autowired
     TripService service;
     @Autowired
     UserService userService;
+    @Autowired
+    private TripRepository tripRepository;
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private TripRepository tripRepository;
-    @Autowired
-    private TripUserMapRepository tripUserMapRepository;
-    @Autowired
-    private TripActivityRepository tripActivityRepository;
-
     @Test
-    void addTrip() throws ParseException {
-        tripUserMapRepository.deleteAll();
-        tripActivityRepository.deleteAll();
-        userRepository.deleteAll();
-        tripRepository.deleteAll();
+    void tripService() throws ParseException {
 
         UserDto userDto =new UserDto();
         userDto.setUserName("name");
@@ -50,7 +36,7 @@ class TripServiceTest {
         userDto.setEmail("name@mail.com");
         userDto.setPhone("1234567891");
         UserDto user = userService.addUser(userDto);
-
+        assertEquals(0, tripRepository.count());
 
         TripDto tripDto =new TripDto();
         tripDto.setTripName("name");
@@ -60,9 +46,30 @@ class TripServiceTest {
         tripDto.setStartDate(startDate);
         Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("1998-05-23");
         tripDto.setEndDate(endDate);
-        service.addTrip(tripDto, user.getUserId());
+        TripDto trip = service.addTrip(tripDto, user.getUserId());
 
-        assertEquals(tripRepository.count(),1);
+        assertEquals(1, tripRepository.count());
+        validate(tripDto, trip);
 
+        TripDto getTrip = service.getTripDetails(trip.getTripId());
+        validate(trip, getTrip);
+
+        TripDto nullTrip = service.getTripDetails(70L);
+        assertNull(nullTrip);
+
+        ModelAndView model = service.viewTrip(user.getUserId());
+        assertEquals("trip", model.getViewName());
+    }
+
+
+    void validate(TripDto originalTrip, TripDto validateTrip)
+    {
+        assertNotNull(validateTrip);
+        assertNotNull(validateTrip.getTripId());
+        assertEquals(originalTrip.getTripName(), validateTrip.getTripName());
+        assertEquals(originalTrip.getTripDescription(), validateTrip.getTripDescription());
+        assertEquals(originalTrip.getDestination(),validateTrip.getDestination());
+        assertEquals(originalTrip.getStartDate(),validateTrip.getStartDate());
+        assertEquals(originalTrip.getEndDate(),validateTrip.getEndDate());
     }
 }

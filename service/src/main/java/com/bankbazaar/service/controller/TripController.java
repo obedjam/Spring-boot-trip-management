@@ -2,7 +2,6 @@ package com.bankbazaar.service.controller;
 
 import com.bankbazaar.core.security.LoginUserDetails;
 import com.bankbazaar.dto.model.TripDto;
-import com.bankbazaar.dto.model.UserDto;
 import com.bankbazaar.service.service.TripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import java.security.Principal;
 
 
 @Slf4j
